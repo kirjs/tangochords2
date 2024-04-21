@@ -1,0 +1,30 @@
+---
+import type {CollectionEntry} from 'astro:content';
+import Layout from './Layout.astro';
+
+import Song from '../components/Song.svelte';
+import Select from '../components/Select.svelte';
+
+import {songsCollection} from "../content/collections";
+
+
+const songs = songsCollection;
+
+
+interface Props {
+    song: CollectionEntry<'songs'>;
+}
+
+
+const {song} = Astro.props;
+
+const {title} = song.data;
+---
+<Layout title={title}>
+    <Select songs={songs} client:only></Select>
+    <h1>{title}</h1>
+
+    <article class='max-w-2xl mx-auto'>
+        <Song client:load song={song}></Song>
+    </article>
+</Layout>

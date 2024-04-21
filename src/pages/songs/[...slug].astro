@@ -1,0 +1,20 @@
+---
+import {songsCollection} from "../../content/collections";
+import SongLayout from '../../layouts/SongLayout.astro';
+
+export async function getStaticPaths() {
+    const songs = songsCollection;
+
+    console.log(songs);
+    return songs.map(entry => {
+        return ({
+            params: {slug: entry.slug}, props: {entry},
+        });
+    });
+}
+
+
+const {entry} = Astro.props;
+const {Content} = await entry.render();
+---
+<SongLayout song={entry}></SongLayout>

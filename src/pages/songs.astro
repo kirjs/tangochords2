@@ -1,0 +1,23 @@
+---
+import {songsCollection} from "../content/collections";
+import Layout from '../layouts/Layout.astro';
+const songs = songsCollection;
+---
+
+<Layout title="Welcome to Astro.">
+    <main>
+        meow
+        <ul>
+            {songs.map(song => {
+                return (
+                        <li>
+                            <a href={'songs/' + song.slug}>{song.data.title}</a></li>);
+            })}
+        </ul>
+
+    </main>
+</Layout>
+
+<style>
+
+</style>
