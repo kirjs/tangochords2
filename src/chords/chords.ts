@@ -162,7 +162,6 @@ export class ChordManager {
         return result;
     }
 
-
     /**
      * Transposes chord.
      * C -> C#
