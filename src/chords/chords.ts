@@ -28,6 +28,41 @@ reverseIndex['H#'] = 3;
 reverseIndex['E#'] = 8;
 
 
+const chordLineRegex = new RegExp("^\\s*(" + chordBase + "\\s*)+$");
+
+/**
+ * Returns true is line consists of chords only.
+ *
+ * @param line
+ */
+function isChordLine(line: string) {
+    return line.match(chordLineRegex);
+}
+
+
+/**
+ *
+ * Transposes chord.
+ * C -> C#
+ * C#m -> D
+ *
+ * This is a real basic function, which doesn't know anything about tonalities and bemols.
+ *
+ * @returns Function
+ */
+function transposeChord(chord: string, steps: number) {
+    steps = +steps;
+    return chord.replace(noteRegex, (note: string) => {
+        if (!note || typeof reverseIndex[note] === "undefined") {
+            return "Can't transpose chord '" + chord + "'";
+        }
+
+        const newIndex = ((reverseIndex[note] || 0) + steps + 12) % 12;
+        return noteIndex[newIndex] || '';
+    });
+
+}
+
 export class ChordManager {
     /**
      * This is a self executing function that prepares regexps we'll need further
@@ -36,7 +71,7 @@ export class ChordManager {
         /**
          *  This regex match line which has nothing but chords and spaces.
          */
-        chordLine: new RegExp("^\\s*(" + chordBase + "\\s*)+$"),
+
 
         /**
          *  This regex is used to match and replace chords.
@@ -56,20 +91,11 @@ export class ChordManager {
      */
     private wrapChordsInLine(line: string, transposeTones: number) {
         return (line + " ").replace(this.regex.chord, (_, chord) => {
-            const transposedChord = this.transposeChord(chord, +transposeTones);
+            const transposedChord = transposeChord(chord, +transposeTones);
             return '<span class = "chord">' + transposedChord + '</span>';
         });
     }
 
-
-    /**
-     * Returns true is line consists of chords only.
-     *
-     * @param line
-     */
-    private isChordLine(line: string) {
-        return line.match(this.regex.chordLine);
-    }
 
     /**
      * If the line cut by %lineLength% symbols ends with a word, we substitute it and return new line length.
@@ -151,7 +177,7 @@ export class ChordManager {
 
             result += '<div class = "chordLine">';
 
-            if (!this.isChordLine(nextLine) && this.isChordLine(line)) {
+            if (!isChordLine(nextLine) && isChordLine(line)) {
                 result += this.breakLongLines(line, nextLine, lineLength, transposeTones);
                 i++;
             } else {
@@ -162,28 +188,145 @@ export class ChordManager {
         return result;
     }
 
-    /**
-     *
-     * Transposes chord.
-     * C -> C#
-     * C#m -> D
-     *
-     * This is a real basic function, which doesn't know anything about tonalities and bemols.
-     *
-     * @returns Function
-     */
-    private transposeChord(chord: string, steps: number) {
-        steps = +steps;
-        return chord.replace(noteRegex, (note: string) => {
-            if (!note || typeof reverseIndex[note] === "undefined") {
-                return "Can't transpose chord '" + chord + "'";
-            }
+}
 
-            const newIndex = ((reverseIndex[note] || 0) + steps + 12) % 12;
-            return noteIndex[newIndex] || '';
-        });
-
-    }
+export interface ParseChordsConfig {
+    text: string;
 }
 
 
+interface ChordLineValueToken {
+    chord: string | undefined;
+    lyrics: string;
+    length: number;
+}
+
+
+interface chordsAndLyricsLineToken {
+    type: 'chordsAndLyricsLine';
+    value: ChordLineValueToken[];
+}
+
+
+interface EmptyLineToken {
+    type: 'emptyLine';
+}
+
+interface LyricsLineToken {
+    type: 'lyricsLine';
+    value: string;
+}
+
+interface ChordsLineTokenValueToken {
+    chord: string
+}
+
+interface ChordsLineToken {
+    type: 'chordsLine';
+    value: ChordsLineTokenValueToken[];
+}
+
+export type LineToken = chordsAndLyricsLineToken | ChordsLineToken | EmptyLineToken | LyricsLineToken;
+
+function emptyLineToken(): EmptyLineToken {
+    return {
+        type: 'emptyLine',
+    };
+}
+
+
+function lyricsToken(line: string): LyricsLineToken {
+    return {
+        type: 'lyricsLine',
+        value: line
+    }
+}
+
+function chordsLineToken(line: string): chordsAndLyricsLineToken {
+    return chordsAnLyrycsToken(line, '');
+}
+
+
+function chordsAnLyrycsToken(chords: string, lyrics: string): chordsAndLyricsLineToken {
+    const parts = chords.padEnd(lyrics.length, ' ').matchAll(/\s+|(\S+)\s*/g);
+    // console.log([...parts])
+    const result: ChordLineValueToken[] = [];
+
+    let shift = 0;
+    for (const [part = '', chord] of parts) {
+        result.push({
+            length: part.length,
+            chord,
+            lyrics: lyrics.slice(shift, shift + part.length)
+        })
+        shift += part.length;
+    }
+
+    console.log(result, [...parts]);
+
+    // if (lyrics.length - shift > 0) {
+    //     result.push({
+    //         chord: ' '.repeat(lyrics.length - shift),
+    //         lyrics: lyrics.slice(shift, lyrics.length),
+    //     })
+    // }
+
+    return {
+        type: 'chordsAndLyricsLine',
+        value: result,
+    }
+}
+
+export function parseChords({text}: ParseChordsConfig): LineToken[] {
+    if (!text || text.trim() === '') {
+        debugger;
+        throw new Error('Empty song');
+    }
+    const lines = text.trim().split('\n');
+
+
+    function parseLines([line, ...rest]: string[]): LineToken[] {
+
+        if (line === undefined) {
+            return [];
+        }
+        if (line.trim() === '') {
+            return [emptyLineToken(), ...parseLines(rest)];
+        }
+
+        if (!isChordLine(line)) {
+            return [lyricsToken(line), ...parseLines(rest)];
+        }
+
+        const [next, ...restWithoutNext] = rest;
+
+        if (!next || isChordLine(next)) {
+            return [chordsLineToken(line), ...parseLines(rest)];
+        }
+
+
+        return [chordsAnLyrycsToken(line, next), ...parseLines(restWithoutNext)];
+
+    }
+
+    return parseLines(lines);
+}
+
+export function transpose(lines: LineToken[], tones: number) {
+    tones = (tones + 12) % 12;
+    return lines.map(line => {
+        if (line.type === 'chordsLine' || line.type === 'chordsAndLyricsLine') {
+            return {
+                ...line,
+                value: line.value.map(value => {
+                    return {
+                        ...value,
+                        chord: value.chord ? transposeChord(value.chord, tones) : value.chord
+                    }
+                })
+            }
+        }
+
+        return line;
+    });
+}

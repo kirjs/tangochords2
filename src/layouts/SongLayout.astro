@@ -4,6 +4,7 @@ import Layout from './Layout.astro';
 
 import Song from '../components/Song.svelte';
 import Select from '../components/Select.svelte';
+import VSong from '../components/VSong.vue';
 
 import {songsCollection} from "../content/collections";
 
@@ -25,6 +26,7 @@ const {title} = song.data;
     <h1>{title}</h1>
 
     <article class='max-w-2xl mx-auto'>
-        <Song client:load song={song}></Song>
+        <!--<Song client:load song={song}></Song>-->
+        <VSong song={song} client:load></VSong>
     </article>
 </Layout>

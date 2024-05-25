@@ -7,14 +7,18 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "vitest"
   },
   "dependencies": {
     "@astrojs/check": "^0.5.10",
     "@astrojs/svelte": "^5.4.0",
+    "@astrojs/vue": "^4.1.0",
     "astro": "^4.6.3",
     "svelte": "^4.2.15",
     "svelte-select": "^5.8.3",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.2",
+    "vue": "^3.4.25"
   }
 }

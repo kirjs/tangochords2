@@ -25,7 +25,7 @@ E7                 A7                                Dm
 Y hoy es tu voz que vuelve a mí  ... en esta tarde gris.
 
 Dm A7 Dm           A7                Dm
-Ven,    triste me decías que en esta soledad
+Ven, triste me decías que en esta soledad
 A#         Gm         A7
 no puede más el alma mía.
 Gm        A7           Dm
