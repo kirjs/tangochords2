@@ -256,20 +256,13 @@ function chordsAnLyrycsToken(chords: string, lyrics: string): chordsAndLyricsLin
     for (const [part = '', chord] of parts) {
         result.push({
             length: part.length,
-            chord,
+            chord: chord ?? '',
             lyrics: lyrics.slice(shift, shift + part.length)
         })
         shift += part.length;
     }
 
-    console.log(result, [...parts]);
 
-    // if (lyrics.length - shift > 0) {
-    //     result.push({
-    //         chord: ' '.repeat(lyrics.length - shift),
-    //         lyrics: lyrics.slice(shift, lyrics.length),
-    //     })
-    // }
 
     return {
         type: 'chordsAndLyricsLine',
