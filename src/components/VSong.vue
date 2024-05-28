@@ -1,7 +1,14 @@
 <template>
   <div>
-    <button @click="transposeUp">👆</button>
-    <button @click="transposeDown">👇</button>
+    <div class="bar">
+      <button @click="transposeUp">🔺</button>
+      <span class="key">{{key ?? '?'}}</span>
+      <button @click="transposeDown">🔻</button>
+
+      <button v-for="k of simpleKeys" @click="() => transposeTo(k)"
+        :disabled="key===k"
+        >{{k}}</button>
+    </div>
     <div class="song">
       <div v-for="line in transposedSong">
         <template v-if="line.type === 'chordsLine'">
@@ -9,8 +16,7 @@
             <Chord v-for="chord in line.value" :chord="chord.chord"></Chord>
           </div>
         </template>
-        <template v-if="line.type === 'lyricsLine'"
-        >
+        <template v-if="line.type === 'lyricsLine'">
           <div class="line">{{ line.value }}</div>
         </template>
         <template v-if="line.type === 'chordsAndLyricsLine'">
@@ -33,17 +39,38 @@
 </template>
 
 <script setup>
-import {parseChords, transpose} from "../chords/chords.ts";
-import {computed, ref} from "vue";
+import { parseChords, transpose, transposeChord, isMinorKey,calcKeyDifference, isMajorKey } from "../chords/chords.ts";
+import { computed, ref } from "vue";
 import Chord from "./Chord.vue";
 
-const {song} = defineProps(['song'])
+const { song } = defineProps(['song'])
 
 const transposeTones = ref(0);
 
-
 const parsedSong = computed(() => {
-  return parseChords({text: song.body});
+  return parseChords({ text: song.body });
+});
+
+const key = computed(() => {
+  if (song.data?.key) {
+    return transposeChord(song.data.key, transposeTones.value);
+  } else {
+    return undefined;
+  }
+});
+
+const simpleKeys = computed(() => {
+  if(!key.value){
+    return [];
+  }
+  
+  if(isMajorKey(key.value)){
+    return ['C', 'G']
+  }
+
+  if(isMinorKey(key.value)){
+    return ['Am', 'Em']
+  }
 });
 
 const transposedSong = computed(() => {
@@ -53,6 +80,10 @@ const transposedSong = computed(() => {
 
 const transposeUp = () => {
   transposeTones.value += 1;
+};
+
+const transposeTo = (newKey) => {
+  transposeTones.value += calcKeyDifference(key.value, newKey);  
 };
 
 const transposeDown = () => {
@@ -77,11 +108,28 @@ const transposeDown = () => {
   margin-bottom: 24px;
 }
 
+.bar {
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+}
+
 button {
-  background: #fff;
+  background: #eee;
   border: 1px #dddddd solid;
-  padding: 20px;
-  border-radius: 50%;
+  padding: 8px;
+  border-radius: 4px;
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+.key {
+  background: #fff;  
+  padding: 8px 16px;
+  display: block;
+  border-radius: 4px;
+  margin-right: 4px;
+  cursor: pointer;
 }
 
 .chords-and-lyrics-line {
@@ -95,4 +143,3 @@ button {
   white-space: pre;
 }
 </style>
-

@@ -1,5 +1,5 @@
 import { assert, describe, expect, test } from 'vitest';
-import { parseChords, transpose } from "./chords.ts";
+import { parseChords, transpose, calcKeyDifference, transposeChord, isMajorKey, isMinorKey } from "./chords.ts";
 
 // Edit an assertion and save to see HMR in action
 
@@ -124,4 +124,55 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZ
           ]
     );
 
+});
+
+
+
+describe('auto-transpose', ()=>{
+    test('calcKeyDifference', ()=>{
+      expect(calcKeyDifference('Am','Am')).toBe(0);
+      expect(calcKeyDifference('Am','Hm')).toBe(2);
+      expect(calcKeyDifference('Am','Dm')).toBe(5);
+      expect(calcKeyDifference('Em','Am')).toBe(5);
+      expect(calcKeyDifference('C','D')).toBe(2);
+      expect(calcKeyDifference('D','C')).toBe(10);
+      expect(calcKeyDifference('C','C')).toBe(0);
+    });
+
+    test('transpose chords', ()=>{
+      expect(transposeChord('Am', 4)).toBe('C#m');
+      expect(transposeChord('Am', 5)).toBe('Dm');
+      expect(transposeChord('Am',0 )).toBe('Am');
+      expect(transposeChord('Am/H', 2 )).toBe('Hm/C#');     
+    });
+
+    test('isMajorKey', ()=>{    
+      expect(isMajorKey('C')).toBe(true);
+      expect(isMajorKey('C#')).toBe(true);
+      expect(isMajorKey('D')).toBe(true);
+      expect(isMajorKey('E#')).toBe(true);
+      
+      expect(isMajorKey('Am')).toBe(false);
+      expect(isMajorKey('C#m')).toBe(false);
+      expect(isMajorKey('Dm')).toBe(false);
+      expect(isMajorKey('Em')).toBe(false);
+
+      expect(isMajorKey('C/F')).toBe(false);
+      expect(isMajorKey('Garbage')).toBe(false);            
+    });
+
+    test('isMinorKey', ()=>{    
+      expect(isMinorKey('Cm')).toBe(true);
+      expect(isMinorKey('C#m')).toBe(true);
+      expect(isMinorKey('Dm')).toBe(true);
+      expect(isMinorKey('E#m')).toBe(true);
+      
+      expect(isMinorKey('A')).toBe(false);
+      expect(isMinorKey('C#')).toBe(false);
+      expect(isMinorKey('D')).toBe(false);
+      expect(isMinorKey('E')).toBe(false);
+
+      expect(isMinorKey('Cm/F')).toBe(false);
+      expect(isMinorKey('Garbage')).toBe(false);            
+    });
 });

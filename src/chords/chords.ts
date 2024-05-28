@@ -50,7 +50,7 @@ function isChordLine(line: string) {
  *
  * @returns Function
  */
-function transposeChord(chord: string, steps: number) {
+export function transposeChord(chord: string, steps: number) {
     steps = +steps;
     return chord.replace(noteRegex, (note: string) => {
         if (!note || typeof reverseIndex[note] === "undefined") {
@@ -262,8 +262,6 @@ function chordsAnLyrycsToken(chords: string, lyrics: string): chordsAndLyricsLin
         shift += part.length;
     }
 
-
-
     return {
         type: 'chordsAndLyricsLine',
         value: result,
@@ -322,4 +320,18 @@ export function transpose(lines: LineToken[], tones: number) {
 
         return line;
     });
+}
+
+export function calcKeyDifference(key1: string, key2: string){
+    const index1 = reverseIndex[key1.slice(0,1)];
+    const index2 = reverseIndex[key2.slice(0,1)];
+    return (index2 - index1 + 12) % 12;   
+}
+
+export function isMajorKey(key: string){
+    return key in reverseIndex;
+}
+  
+export function isMinorKey(key: string){
+    return key.slice(-1) === 'm' && isMajorKey(key.slice(0, -1))
 }

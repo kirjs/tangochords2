@@ -1,5 +1,5 @@
 ---
-title: 'Осень'
+title: 'Vino Triste'
 pubDate: 2022-07-01
 source: https://www.acordesdcanciones.com/2020/06/el-vino-triste-hugo-del-carril.html
 ---
