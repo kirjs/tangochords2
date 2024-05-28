@@ -1,5 +1,5 @@
 import { assert, describe, expect, test } from 'vitest';
-import { parseChords, transpose, calcKeyDifference, transposeChord, isMajorKey, isMinorKey } from "./chords.ts";
+import { parseChords, transpose, calcKeyDifference, transposeChord, isMajorKey, isMinorKey, isTagLine } from "./chords.ts";
 
 // Edit an assertion and save to see HMR in action
 
@@ -127,6 +127,15 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZ
 });
 
 
+
+describe('tag line', ()=>{
+  test('isTagLine', ()=>{
+    expect(isTagLine('[pirojok]')).toBe(true);
+    expect(isTagLine(' lol   [pirojok]')).toBe(false);
+    expect(isTagLine('[pirojok]ddsd')).toBe(false);
+    expect(isTagLine('')).toBe(false);
+  });
+});
 
 describe('auto-transpose', ()=>{
     test('calcKeyDifference', ()=>{

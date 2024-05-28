@@ -8,6 +8,7 @@ Performer: Homero Manzi
 key: Em
 ---
 
+[Verse 1]
 Em            Cdim  Em                 
 Te oí decir..adiós, adiós... 
              E7            Am

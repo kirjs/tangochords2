@@ -242,6 +242,18 @@ function lyricsToken(line: string): LyricsLineToken {
     }
 }
 
+
+export function isTagLine(line: string){
+    return /^\[[^]*\]$/.test(line);
+}
+
+function tagToken(line: string): LyricsLineToken {
+    return {
+        type: 'tagLine',
+        value: line.slice(1, -1)
+    }
+}
+
 function chordsLineToken(line: string): chordsAndLyricsLineToken {
     return chordsAnLyrycsToken(line, '');
 }
@@ -283,6 +295,10 @@ export function parseChords({text}: ParseChordsConfig): LineToken[] {
         }
         if (line.trim() === '') {
             return [emptyLineToken(), ...parseLines(rest)];
+        }
+
+        if (isTagLine(line)) {                                    
+            return [tagToken(line), ...parseLines(rest)];
         }
 
         if (!isChordLine(line)) {
@@ -335,3 +351,4 @@ export function isMajorKey(key: string){
 export function isMinorKey(key: string){
     return key.slice(-1) === 'm' && isMajorKey(key.slice(0, -1))
 }
+
