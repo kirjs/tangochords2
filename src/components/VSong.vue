@@ -8,7 +8,8 @@
       <button v-for="k of simpleKeys" @click="() => transposeTo(k)" :disabled="key === k">{{ k }}</button>
     </div>
     <div class="song">
-      <div :class="['line', line.type, line.tag, line.sectionEnd ? 'section-end' : '']" v-for="line in transposedSong" :key="line">
+      <div :class="['line', line.type, line.tag, line.sectionEnd ? 'section-end' : '']" v-for="line in transposedSong"
+        :key="line">
         <template v-if="line.type === 'chordsLine'">
           <Chord v-for="chord in line.value" :key="chord" :chord="chord.chord"></Chord>
         </template>
@@ -132,52 +133,57 @@ const transposeDown = () => {
     cursor: pointer;
   }
 }
- 
-
-
-.line {
-  &.tag-verse {
-    background: rgb(255, 248, 154);
-  }
-
-  &.tag-chorus {
-    background: rgb(215, 255, 155);
-  }
-
-
-  &.emptyLine {
-    padding: 12px 0;  
-  } 
-
-  &.section-end {
-    border-radius: 0 0  16px 16px;
-  }
-
-  &.tagLine {
-    margin-top: 24px;
-    border-radius: 16px 16px 0 0;
-    padding-top: 8px;
-
-    .tag {
-      background: rgba(0, 0, 0, 0.1);
-      margin-top: -8px;
-      border-radius: 8px;
-      padding: 4px 24px;
-      margin-left: -24px;
-    }
-  }
-}
-
-
 
 .song {
   display: table;
   width: auto;
 }
 
-.line  {
+.line {
   display: table-row;
-} 
+
+  $tag-backgrounds: (
+    'verse': rgb(255, 248, 154),
+    'chorus': rgb(215, 255, 155),
+    'bridge': rgb(255, 232, 232),
+    'intro': rgb(240, 240, 240)
+  );
+
+@each $tag, $color in $tag-backgrounds {
+  &.tag-#{$tag} {
+    background: $color;
+  }
+}
+
+
+&.emptyLine {
+  padding: 12px 0;
+}
+
+&.section-end {
+  border-radius: 0 0 16px 16px;
+  padding-bottom: 16px;
+}
+
+&.tagLine {
+  margin-top: 24px;
+  border-radius: 16px 16px 0 0;
+  padding-top: 8px;
+
+  .tag {
+    background: rgba(0, 0, 0, 0.1);
+    margin-top: -8px;
+    border-radius: 16px;
+    padding: 4px 24px;
+    margin-left: -24px;
+  }
+}
+}
+
+
+
+
+
 
 
 /* 
@@ -206,5 +212,5 @@ const transposeDown = () => {
 .line {
   display: flex;
   white-space: nowrap;
-} 
+}
 </style>

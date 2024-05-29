@@ -4,9 +4,11 @@ pubDate: 2022-07-01
 source: https://www.acordesdcanciones.com/2020/06/el-vino-triste-hugo-del-carril.html
 ---
 
+[Intro]
 C B7 E7   Am  Am/G 
 F  E7   Am         G7                 
 
+[Verse]
 C   Em/B         A# A 
 Dicen los amigos que mi vino es triste, 
 Dm  G7   C 
@@ -16,6 +18,7 @@ que soy un maleta que ya no resiste
 A7         D7       G 
 de la caña brava ni el macho sabor...                               
 
+[Verse]
 Fm  A#7        D# 
 Y es que ya se ha muerto todo lo que existe
 D7     G#          G7 
@@ -25,6 +28,7 @@ Siempre estoy borracho desde que te fuiste,
 Dm     G7          C 
 siempre estoy borracho... pero es de dolor... 
 
+[Chorus]
 E7 Am                              Dm 
 Amigos, a todos pido perdón
 G7                          C 
@@ -42,6 +46,7 @@ que el vino se vuelva pesado y llorón
 F  E7   Am 
 como el triste aletear de mi canción.                   
 
+[Verse]
 C   Em/B         A# A 
 Dicen los amigos que no soy el mismo,                               
 Dm  G7               C 
@@ -49,7 +54,9 @@ que hoy en cuanto bebo me da por no hablar,
 C       B7      Em
 por arrinconarme con mi pesimismo                         
 A7           D7       G 
-y que muchas veces me han visto llorar...                     
+y que muchas veces me han visto llorar...   
+
+[Verse]
 Fm  A#7        D# 
 Y no saben ellos que no es la bebida                           
 D7     G#        G7 
@@ -59,6 +66,7 @@ que en el alma llevo sangrando una herida
 Dm     G7        C 
 y voy por la vida cargando mi cruz... 
 
+[Chorus]
 E7 
 
 Am                  Dm 
