@@ -25,7 +25,7 @@
               <Chord v-if="item.chord" :chord="item.chord">
               </Chord>{{ ' '.repeat(Math.max(0, item.length - item.chord.length)) }}
             </div>
-            <div>{{ item.lyrics }}</div>
+            <div class="lyrics">{{ item.lyrics }}</div>
           </div>
         </template>
       </div>
@@ -149,35 +149,35 @@ const transposeDown = () => {
     'intro': rgb(240, 240, 240)
   );
 
-@each $tag, $color in $tag-backgrounds {
-  &.tag-#{$tag} {
-    background: $color;
+  @each $tag, $color in $tag-backgrounds {
+    &.tag-#{$tag} {
+      background: $color;
+    }
   }
-}
 
 
-&.emptyLine {
-  padding: 12px 0;
-}
-
-&.section-end {
-  border-radius: 0 0 16px 16px;
-  padding-bottom: 16px;
-}
-
-&.tagLine {
-  margin-top: 24px;
-  border-radius: 16px 16px 0 0;
-  padding-top: 8px;
-
-  .tag {
-    background: rgba(0, 0, 0, 0.1);
-    margin-top: -8px;
-    border-radius: 16px;
-    padding: 4px 24px;
-    margin-left: -24px;
+  &.emptyLine {
+    padding: 12px 0;
   }
-}
+
+  &.section-end {
+    border-radius: 0 0 16px 16px;
+    padding-bottom: 16px;
+  }
+
+  &.tagLine {
+    margin-top: 24px;
+    border-radius: 16px 16px 0 0;
+    padding-top: 8px;
+
+    .tag {
+      background: rgba(0, 0, 0, 0.1);
+      margin-top: -8px;
+      border-radius: 16px;
+      padding: 4px 24px;
+      margin-left: -24px;
+    }
+  }
 }
 
 
@@ -207,10 +207,12 @@ const transposeDown = () => {
   white-space: pre;
 }
 
-
-
 .line {
   display: flex;
   white-space: nowrap;
+}
+
+.lyrics {
+  white-space: pre;
 }
 </style>

@@ -11,9 +11,7 @@ const hasChord = computed(() => {
 })
 </script>
 
-<template>
-
-
+<template >
   <span v-if="hasChord" class="chord">{{ chord }}</span>
   <span v-if="!hasChord">{{ chord }}</span>
 </template>

@@ -10,7 +10,7 @@ key: Em
 
 [Verse 1]
 Em            Cdim  Em                 
-Te oí decir..adiós, adiós... 
+Te oí decir... adiós, adiós... 
              E7            Am
 Cerré los ojos y oculté el dolor...
            B7                Em        
@@ -34,7 +34,6 @@ En las noches desoladas, que sacude el
 viento,
 B7              Em     E7                      
 brillan las estrellas frías del  remordimiento
-
        Am           F7        G  F# F E    
 y me engaño que habrás de volver otra vez 
     Am         A7        D7
