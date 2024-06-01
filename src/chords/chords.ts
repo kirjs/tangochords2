@@ -62,6 +62,9 @@ export function transposeChord(chord: string, steps: number) {
     });
 
 }
+export function transposeChords(chords: string, steps: number){
+    return chords.map(chord => transposeChord(chord, steps));
+}
 
 export class ChordManager {
     /**
@@ -162,7 +165,7 @@ export class ChordManager {
      * keeping chords above the text
      */
 
-    wrapChords({text = '', lineLength = 80, transposeTones = 0, key = 'Am', wantedKey = 'Am'}) {
+    wrapChords({ text = '', lineLength = 80, transposeTones = 0, key = 'Am', wantedKey = 'Am' }) {
         var result = '';
         var lines = text.trim().split(/[\n\r]{1,2}/);
         lineLength = lineLength || 50;
@@ -243,7 +246,7 @@ function lyricsToken(line: string): LyricsLineToken {
 }
 
 
-export function isTagLine(line: string){
+export function isTagLine(line: string) {
     return /^\[[^]*\]$/.test(line);
 }
 
@@ -280,7 +283,7 @@ function chordsAnLyrycsToken(chords: string, lyrics: string): chordsAndLyricsLin
     }
 }
 
-export function parseChords({text}: ParseChordsConfig): LineToken[] {
+export function parseChords({ text }: ParseChordsConfig): LineToken[] {
     if (!text || text.trim() === '') {
         debugger;
         throw new Error('Empty song');
@@ -297,7 +300,7 @@ export function parseChords({text}: ParseChordsConfig): LineToken[] {
             return [emptyLineToken(), ...parseLines(rest)];
         }
 
-        if (isTagLine(line)) {                                    
+        if (isTagLine(line)) {
             return [tagToken(line), ...parseLines(rest)];
         }
 
@@ -338,17 +341,37 @@ export function transpose(lines: LineToken[], tones: number) {
     });
 }
 
-export function calcKeyDifference(key1: string, key2: string){
-    const index1 = reverseIndex[key1.slice(0,1)];
-    const index2 = reverseIndex[key2.slice(0,1)];
-    return (index2 - index1 + 12) % 12;   
+export function calcKeyDifference(key1: string, key2: string) {
+    const index1 = reverseIndex[key1.slice(0, 1)];
+    const index2 = reverseIndex[key2.slice(0, 1)];
+    return (index2 - index1 + 12) % 12;
 }
 
-export function isMajorKey(key: string){
+export function isMajorKey(key: string) {
     return key in reverseIndex;
 }
-  
-export function isMinorKey(key: string){
+
+export function isMinorKey(key: string) {
     return key.slice(-1) === 'm' && isMajorKey(key.slice(0, -1))
+}
+
+export function extractChords(lines: LineToken[]) {
+    const allChords = lines.filter(line => line.type === 'chordsAndLyricsLine')
+    .flatMap(line => line.value)
+    .map(value => value.chord)
+    .filter(chord => chord !=='');
+
+    return [...new Set(allChords)].sort();
+}
+
+
+
+const baseChordRegex = /^[A-H]#?m?/i
+
+export function extractBaseChord(chord: string) {
+    return chord.replace('maj', '').match(baseChordRegex)[0];
+}
+export function extractBaseChords(chords: string[]) {
+    return chords.map(extractBaseChord);  
 }
 

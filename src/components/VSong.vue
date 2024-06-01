@@ -6,6 +6,7 @@
       <button @click="transposeDown">🔻</button>
 
       <button v-for="k of simpleKeys" @click="() => transposeTo(k)" :disabled="key === k">{{ k }}</button>
+      <button v-if="magicKey"  @click="() => transposeTonesNTones(magicKey.shift)" :disabled="magicKey.shift === 0">{{ magicKey.chordName }}</button>
     </div>
     <div class="song">
       <div :class="['line', line.type, line.tag, line.sectionEnd ? 'section-end' : '']" v-for="line in transposedSong"
@@ -38,6 +39,8 @@ import { parseChords, transpose, transposeChord, isMinorKey, calcKeyDifference, 
 import { computed, ref } from "vue";
 import Chord from "./Chord.vue";
 import { tagLines } from "../chords/tag_lines.ts";
+import { calculateBestKey } from "../chords/analysis.ts";
+
 
 
 const { song } = defineProps(['song'])
@@ -56,9 +59,9 @@ const key = computed(() => {
   }
 });
 
-const simpleKeys = computed(() => {
+const simpleKeys = computed(() => {  
   if (!key.value) {
-    return [];
+    return [];    
   }
 
   if (isMajorKey(key.value)) {
@@ -79,9 +82,27 @@ const transposedSong = computed(() => {
 });
 
 
+const magicKey = computed(() => {
+  
+  
+  const bestKey = calculateBestKey(transposedSong.value);
+  console.log(bestKey);
+
+  return {
+    chordName: key.value ? transposeChord(key.value, bestKey.shift) : undefined,
+    ...bestKey
+  };
+});
+
+
 const transposeUp = () => {
   transposeTones.value += 1;
 };
+
+
+const transposeTonesNTones = (n) => {
+  transposeTones.value += n;
+}
 
 const transposeTo = (newKey) => {
   transposeTones.value += calcKeyDifference(key.value, newKey);
