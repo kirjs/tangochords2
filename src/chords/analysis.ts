@@ -54,14 +54,18 @@ export function calculateScoresForAllKeys(chords: string[]){
     });
 }
 
-export function calculateBestKey(lines: LineToken[]){
+export function analyzeSong(lines: LineToken[]){
     const baseChords = extractBaseChords(extractChords(lines));
 
     const scores = calculateScoresForAllKeys(baseChords);
     
-    scores
+    const result = scores
     .sort((a, b) => a.shift - b.shift)
     .sort((a, b) => a.score - b.score);
-    console.log(scores);
-    return scores[0];    
+
+    return {
+        bestKey: result[0],
+        worstKey: result[result.length - 1],
+        allKeys: result,
+    }
 }

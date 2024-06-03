@@ -23,10 +23,10 @@ const {title} = song.data;
 ---
 <Layout title={title}>
     <Select songs={songs} client:only></Select>
-    <h1>{title}</h1>
+    <h1><a href="/songs" style="text-decoration: none">🏡</a> {title}</h1>
+    
 
-    <article class='max-w-2xl mx-auto'>
-        <!--<Song client:load song={song}></Song>-->
+    <article class='max-w-2xl mx-auto'>         
         <VSong song={song} client:load></VSong>
     </article>
 </Layout>
