@@ -41,7 +41,7 @@ function amdmParser(html: string): SongInfo {
         .replaceAll(/(\(.*?\))/gi, '$1\n')
         // Drop tabs
         .replaceAll(/[1-6]\|[\d-]*\|\n/gi, '')
-
+        
 
 
     return {
