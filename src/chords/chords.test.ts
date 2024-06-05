@@ -1,5 +1,15 @@
 import { assert, describe, expect, test } from 'vitest';
-import { parseChords, extractBaseChords, transpose, calcKeyDifference, transposeChord, extractChords, isMajorKey, isMinorKey, isTagLine } from "./chords.ts";
+import {
+  parseChords,
+  extractBaseChords,
+  transpose,
+  calcKeyDifference,
+  transposeChord,
+  extractChords,
+  isMajorKey,
+  isMinorKey,
+  isTagLine,
+} from './chords.ts';
 
 // Edit an assertion and save to see HMR in action
 
@@ -8,124 +18,115 @@ describe('parseChords', () => {
     text: `
 Am        Dm       Em
 Meow meow meow meow meow         
-        `
+        `,
   });
 
   const expected = [
     {
-      "type": "chordsAndLyricsLine",
-      "value": [
+      type: 'chordsAndLyricsLine',
+      value: [
         {
-          "length": 10,
-          "chord": "Am",
-          "lyrics": "Meow meow "
+          length: 10,
+          chord: 'Am',
+          lyrics: 'Meow meow ',
         },
         {
-          "length": 9,
-          "chord": "Dm",
-          "lyrics": "meow meow"
+          length: 9,
+          chord: 'Dm',
+          lyrics: 'meow meow',
         },
         {
-          "length": 5,
-          "chord": "Em",
-          "lyrics": " meow"
-        }
-      ]
-    }
+          length: 5,
+          chord: 'Em',
+          lyrics: ' meow',
+        },
+      ],
+    },
   ];
 
-  console.log('<----')
-  console.log(JSON.stringify(result))
-  console.log('---->')
+  console.log('<----');
+  console.log(JSON.stringify(result));
+  console.log('---->');
   test('parse chords', () => {
-    expect(result).toEqual(
-      expected
-    );
-
+    expect(result).toEqual(expected);
   });
 
-
   test('parse chords with empty spaces before chords', () => {
-
     const result = parseChords({
       text: `
 Am 
 Meow
    Dm
 Wuf
-        `
+        `,
     });
-
 
     const expected = [
       {
-        "type": "chordsAndLyricsLine",
-        "value": [
+        type: 'chordsAndLyricsLine',
+        value: [
           {
-            "length": 4,
-            "chord": "Am",
-            "lyrics": "Meow"
-          }
-        ]
+            length: 4,
+            chord: 'Am',
+            lyrics: 'Meow',
+          },
+        ],
       },
       {
-        "type": "chordsAndLyricsLine",
-        "value": [
+        type: 'chordsAndLyricsLine',
+        value: [
           {
-            "length": 3,
-            "lyrics": "Wuf",
-            "chord": ''
+            length: 3,
+            lyrics: 'Wuf',
+            chord: '',
           },
           {
-            "length": 2,
-            "chord": "Dm",
-            "lyrics": ""
-          }
-        ]
-      }
+            length: 2,
+            chord: 'Dm',
+            lyrics: '',
+          },
+        ],
+      },
     ];
 
-
     expect(result).toEqual(expected);
-
   });
-
-})
-
-test('transpose', () => {
-  expect(transpose(parseChords({
-    text: `
-Am        Dm       Em
-ABCDEFGHIJKLMNOPQRSTUVWXYZ         
-        `
-  }), 2)).toEqual(
-    [
-      {
-        "type": "chordsAndLyricsLine",
-        "value": [
-          {
-            "length": 10,
-            "chord": "Hm",
-            "lyrics": "ABCDEFGHIJ"
-          },
-          {
-            "length": 9,
-            "chord": "Em",
-            "lyrics": "KLMNOPQRS"
-          },
-          {
-            "length": 7,
-            "chord": "F#m",
-            "lyrics": "TUVWXYZ"
-          }
-        ]
-      }
-    ]
-  );
-
 });
 
-
+test('transpose', () => {
+  expect(
+    transpose(
+      parseChords({
+        text: `
+Am        Dm       Em
+ABCDEFGHIJKLMNOPQRSTUVWXYZ         
+        `,
+      }),
+      2,
+    ),
+  ).toEqual([
+    {
+      type: 'chordsAndLyricsLine',
+      value: [
+        {
+          length: 10,
+          chord: 'Hm',
+          lyrics: 'ABCDEFGHIJ',
+        },
+        {
+          length: 9,
+          chord: 'Em',
+          lyrics: 'KLMNOPQRS',
+        },
+        {
+          length: 7,
+          chord: 'F#m',
+          lyrics: 'TUVWXYZ',
+        },
+      ],
+    },
+  ]);
+});
 
 describe('tag line', () => {
   test('isTagLine', () => {
@@ -189,52 +190,41 @@ describe('extractChords', () => {
   test('Extracts some basic chords', () => {
     const parsed = parseChords({
       text: `Am        Dm       Em
-  Meow meow meow meow meow `
+  Meow meow meow meow meow `,
     });
 
     expect(extractChords(parsed)).toEqual(['Am', 'Dm', 'Em']);
-
   });
 
   test('sorts chords alphabetically', () => {
     const parsed = parseChords({
       text: `Em       Dm       Am
-  Meow meow meow meow meow `
+  Meow meow meow meow meow `,
     });
 
     expect(extractChords(parsed)).toEqual(['Am', 'Dm', 'Em']);
-
   });
 
   test('deduplicates chords', () => {
     const parsed = parseChords({
       text: `Em   Em    Dm       Am
   Meow meow meow meow meow 
-  Am Dm Dm Am`
+  Am Dm Dm Am`,
     });
 
     expect(extractChords(parsed)).toEqual(['Am', 'Dm', 'Em']);
-
   });
 });
-
-
 
 describe('extractBaseChords', () => {
   test('Extracts some basic chords', () => {
     expect(extractBaseChords(['Am'])).toEqual(['Am']);
-    
+
     expect(extractBaseChords(['Cdim'])).toEqual(['C']);
     expect(extractBaseChords(['C#dim'])).toEqual(['C#']);
     expect(extractBaseChords(['C#m7b5'])).toEqual(['C#m']);
     expect(extractBaseChords(['E13b9'])).toEqual(['E']);
     // It's a bug
     expect(extractBaseChords(['Bmaj7#11'])).toEqual(['B']);
-
-
-    
-
-    
-
-  }); 
+  });
 });

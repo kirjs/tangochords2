@@ -1,38 +1,64 @@
 <template>
   <div class="bar">
-    <button @click="transposeUp">      
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 4L4 12H8V20H16V12H20L12 4Z" fill="currentColor"/>
+    <button @click="transposeUp">
+      <svg
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M12 4L4 12H8V20H16V12H20L12 4Z" fill="currentColor" />
       </svg>
     </button>
-    <span class="key">{{ props.songKey ?? '?' }}</span> 
+    <span class="key">{{ props.songKey ?? '?' }}</span>
     <button @click="transposeDown">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 20L20 12H16V4H8V12H4L12 20Z" fill="currentColor"/>
+      <svg
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M12 20L20 12H16V4H8V12H4L12 20Z" fill="currentColor" />
       </svg>
     </button>
     |
-    <button v-for="k of simpleKeys" @click="() => transposeTo(k)" :disabled="props.songKey  === k">{{ k }}</button>
-    <button v-if="magicKey" @click="() => transposeByNTones(magicKey.shift)" :disabled="magicKey.shift === 0">{{
-      magicKey.chordName }}</button>
+    <button
+      v-for="k of simpleKeys"
+      @click="() => transposeTo(k)"
+      :disabled="props.songKey === k"
+    >
+      {{ k }}
+    </button>
+    <button
+      v-if="magicKey"
+      @click="() => transposeByNTones(magicKey.shift)"
+      :disabled="magicKey.shift === 0"
+    >
+      {{ magicKey.chordName }}
+    </button>
   </div>
 </template>
 
 <script setup>
 import { defineEmits, defineProps, computed } from 'vue';
-import { analyzeSong} from "../chords/analysis.ts";
-import { transposeChord, isMajorKey, isMinorKey, calcKeyDifference } from "../chords/chords.ts";
-
+import { analyzeSong } from '../chords/analysis.ts';
+import {
+  transposeChord,
+  isMajorKey,
+  isMinorKey,
+  calcKeyDifference,
+} from '../chords/chords.ts';
 
 const props = defineProps({
   songKey: String,
   shift: {
     type: Number,
-    required: true
+    required: true,
   },
-  transposedSong: Array  
+  transposedSong: Array,
 });
-
 
 const emit = defineEmits(['update:shift']);
 
@@ -42,25 +68,24 @@ const simpleKeys = computed(() => {
   }
 
   if (isMajorKey(props.songKey)) {
-    return ['C', 'G']
+    return ['C', 'G'];
   }
 
   if (isMinorKey(props.songKey)) {
-    return ['Am', 'Em']
+    return ['Am', 'Em'];
   }
 });
 
-
-const transposeUp = () => {  
+const transposeUp = () => {
   emit('update:shift', props.shift + 1);
 };
 
 const transposeTonesNTones = (n) => {
   emit('update:shift', props.shift + n);
-}
+};
 
 const transposeTo = (newKey) => {
-  emit('update:shift', calcKeyDifference(props.songKey, newKey));  
+  emit('update:shift', calcKeyDifference(props.songKey, newKey));
 };
 
 const transposeDown = () => {
@@ -68,22 +93,21 @@ const transposeDown = () => {
 };
 
 const magicKey = computed(() => {
-  const {bestKey} = analyzeSong(props.transposedSong);
- 
+  const { bestKey } = analyzeSong(props.transposedSong);
+
   return {
-    chordName: props.songKey ? transposeChord(props.songKey, bestKey.shift) : undefined,
-    ...bestKey
+    chordName: props.songKey
+      ? transposeChord(props.songKey, bestKey.shift)
+      : undefined,
+    ...bestKey,
   };
 });
-
-
 </script>
 
 <style scoped lang="scss">
-
 .bar {
   padding: 8px;
-  border-radius: 8px;;
+  border-radius: 8px;
 
   display: flex;
   align-items: center;
@@ -106,9 +130,8 @@ const magicKey = computed(() => {
     padding: 8px 0px;
     display: block;
     border-radius: 4px;
-    
+
     cursor: pointer;
   }
 }
-
 </style>

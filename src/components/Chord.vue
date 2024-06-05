@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import {computed} from 'vue';
+import { computed } from 'vue';
 
-
-const {chord} = defineProps({
+const { chord } = defineProps({
   chord: String,
 });
 
 const hasChord = computed(() => {
-  return chord?.trim() !== ''
-})
+  return chord?.trim() !== '';
+});
 </script>
 
-<template >
+<template>
   <span v-if="hasChord" class="chord">{{ chord }}</span>
   <span v-if="!hasChord">{{ chord }}</span>
 </template>
