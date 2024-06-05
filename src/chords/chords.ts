@@ -321,6 +321,7 @@ function chordsAnLyrycsToken(
 
 export function parseChords({ text }: ParseChordsConfig): LineToken[] {
   if (!text || text.trim() === '') {
+    // eslint-disable-next-line no-debugger
     debugger;
     throw new Error('Empty song');
   }

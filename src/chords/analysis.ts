@@ -42,8 +42,6 @@ export function calculateSumScore(chords: string[]) {
   return chords.map((chord) => chordHardness[chord]).reduce((a, b) => a + b, 0);
 }
 
-export function findEasiestKey(chords: string[]) {}
-
 export function calculateScoresForAllKeys(chords: string[]) {
   return Array(12)
     .fill()

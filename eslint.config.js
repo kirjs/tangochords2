@@ -4,19 +4,15 @@ import tseslint from 'typescript-eslint';
 import pluginVue from 'eslint-plugin-vue';
 
 export default [
-  { languageOptions: { globals: globals.browser }, 
-  ignores: [
-    'dist',
-    'dist/**/*',
-    './dist/**/*',
-    '.dist/',
-    'node_modules',
-    'node_modules/**/*',
-  ],
-
-},
+  {
+    ignores: [ 'dist/**', '.firebase/**', '.astro/**'],
+  },
+  {
+    languageOptions: { globals: globals.browser },
+  },
   pluginJs.configs.recommended,
 
   ...tseslint.configs.recommended,
   ...pluginVue.configs['flat/essential'],
+ 
 ];

@@ -25,7 +25,8 @@
     </button>
     |
     <button
-      v-for="k of simpleKeys"
+      v-for="k of simpleKeys" 
+      :key="k"
       @click="() => transposeTo(k)"
       :disabled="props.songKey === k"
     >
@@ -74,6 +75,8 @@ const simpleKeys = computed(() => {
   if (isMinorKey(props.songKey)) {
     return ['Am', 'Em'];
   }
+
+  return [];
 });
 
 const transposeUp = () => {

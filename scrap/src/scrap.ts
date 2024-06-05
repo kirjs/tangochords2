@@ -96,7 +96,7 @@ async function scrapChords(url: string, folder: string) {
 
     const fileName = slugify(data.performer + ' - ' + data.title) + '.md';
 
-    let content = generateContent(data);
+    const content = generateContent(data);
 
     fs.writeFileSync(path.join(folder, fileName), content);
   } catch (e) {
