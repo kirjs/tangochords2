@@ -1,5 +1,4 @@
 import {
-  transposeChord,
   transposeChords,
   extractBaseChords,
   extractChords,

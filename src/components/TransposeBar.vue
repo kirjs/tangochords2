@@ -80,7 +80,7 @@ const transposeUp = () => {
   emit('update:shift', props.shift + 1);
 };
 
-const transposeTonesNTones = (n) => {
+const transposeByNTones = (n) => {
   emit('update:shift', props.shift + n);
 };
 

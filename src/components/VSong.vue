@@ -17,11 +17,11 @@
         :key="line"
       >
         <template v-if="line.type === 'chordsLine'">
-          <Chord
+          <SongChord
             v-for="chord in line.value"
             :key="chord"
             :chord="chord.chord"
-          ></Chord>
+          ></SongChord>
         </template>
         <template v-if="line.type === 'lyricsLine'">
           {{ line.value }}
@@ -30,9 +30,9 @@
           <div class="tag">{{ line.value }}</div>
         </template>
         <template v-if="line.type === 'chordsAndLyricsLine'">
-          <div v-for="item in line.value">
+          <div v-for="(item, index) in line.value" :key="index" >
             <div class="chord-or-spacer">
-              <Chord v-if="item.chord" :chord="item.chord"> </Chord
+              <SongChord v-if="item.chord" :chord="item.chord"> </SongChord
               >{{ ' '.repeat(Math.max(0, item.length - item.chord.length)) }}
             </div>
             <div class="lyrics">{{ item.lyrics }}</div>
@@ -47,12 +47,10 @@
 import {
   parseChords,
   transpose,
-  transposeChord,
-  calcKeyDifference,
-  isMajorKey,
+  transposeChord,  
 } from '../chords/chords.ts';
 import { computed, ref } from 'vue';
-import Chord from './Chord.vue';
+import SongChord from './SongChord.vue';
 import { tagLines } from '../chords/tag_lines.ts';
 import TransposeBar from './TransposeBar.vue';
 

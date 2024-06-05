@@ -1,6 +1,6 @@
-import { assert, describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import { calculateKeyScore, calculateScoresForAllKeys } from './analysis.ts';
-import { parseChords } from './chords.ts';
+
 
 describe('findEasiestKey', () => {
   test('Extracts some basic chords', () => {

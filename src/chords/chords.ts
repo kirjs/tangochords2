@@ -195,15 +195,13 @@ export class ChordManager {
   wrapChords({
     text = '',
     lineLength = 80,
-    transposeTones = 0,
-    key = 'Am',
-    wantedKey = 'Am',
+    transposeTones = 0,      
   }) {
-    var result = '';
-    var lines = text.trim().split(/[\n\r]{1,2}/);
+    let result = '';
+    const  lines = text.trim().split(/[\n\r]{1,2}/);
     lineLength = lineLength || 50;
 
-    for (var i = 0, l = lines.length - 1; i < l; i++) {
+    for (let i = 0, l = lines.length - 1; i < l; i++) {
       const line = lines[i];
       const nextLine = lines[i + 1] || '';
       if (!line) {
