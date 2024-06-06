@@ -77,6 +77,7 @@ const simpleKeys = computed(() => {
   }
 
   return [];
+
 });
 
 const transposeUp = () => {

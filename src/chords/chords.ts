@@ -1,3 +1,5 @@
+import { castExists } from './asserts';
+
 const chordBase =
   '[A-H][\\#b]?(?:m|Minor|Major)?(5|9b5|6add9|maj|maj7|maj9|maj11|maj13|maj9#11|maj13#11|6|add9|maj7b5|maj7#5||min|m7|m9|m11|m13|m6|madd9|m6add9|mmaj7|mmaj9|m7b5|m7#5|7|9|11|13|7sus4|7b5|7#5|7b9|7#9|7b5b9|7b5#9|7#5b9|9#5|13#11|13b9|11b9|aug|dim|dim7|sus4|sus2|sus2sus4|-5|7h5)?(?:/[A-H][\\#b]?)?';
 
@@ -73,7 +75,7 @@ export function transposeChord(chord: string, steps: number) {
     return noteIndex[newIndex] || '';
   });
 }
-export function transposeChords(chords: string, steps: number) {
+export function transposeChords(chords: string[], steps: number) {
   return chords.map((chord) => transposeChord(chord, steps));
 }
 
@@ -109,15 +111,12 @@ export class ChordManager {
 
   /**
    * If the line cut by %lineLength% symbols ends with a word, we substitute it and return new line length.
-   *
-   * @param line
-   * @param lineLength
-   * @return {*}
    */
-  private wrapLength(line: string, lineLength: number) {
+  private wrapLength(line: string, lineLength: number): number {
     const lastPart = (line + ' ')
-      .substr(0, lineLength)
+      .slice(0, lineLength)
       .match(this.regex.wordAtTheEndOfTheLine);
+
     if (lastPart) {
       return (lastPart?.index || 0) + 1;
     }
@@ -157,14 +156,14 @@ export class ChordManager {
     if (chordLine.length || textLine.length) {
       return (
         '<p class = "chords">' +
-        this.wrapChordsInLine(chordLine.substr(0, lineLength), transposeTones) +
+        this.wrapChordsInLine(chordLine.slice(0, lineLength), transposeTones) +
         '</p>' +
         '<p>' +
-        textLine.substr(0, lineLength) +
+        textLine.slice(0, lineLength) +
         '</p>' +
         this.breakLongLines(
-          chordLine.substr(lineLength),
-          textLine.substr(lineLength),
+          chordLine.slice(0, lineLength),
+          textLine.slice(0, lineLength),
           lineLength,
           transposeTones,
         )
@@ -192,13 +191,9 @@ export class ChordManager {
    * keeping chords above the text
    */
 
-  wrapChords({
-    text = '',
-    lineLength = 80,
-    transposeTones = 0,      
-  }) {
+  wrapChords({ text = '', lineLength = 80, transposeTones = 0 }) {
     let result = '';
-    const  lines = text.trim().split(/[\n\r]{1,2}/);
+    const lines = text.trim().split(/[\n\r]{1,2}/);
     lineLength = lineLength || 50;
 
     for (let i = 0, l = lines.length - 1; i < l; i++) {
@@ -252,6 +247,11 @@ interface LyricsLineToken {
   value: string;
 }
 
+interface TagLineToken {
+  type: 'tagLine';
+  value: string;
+}
+
 interface ChordsLineTokenValueToken {
   chord: string;
 }
@@ -265,7 +265,8 @@ export type LineToken =
   | chordsAndLyricsLineToken
   | ChordsLineToken
   | EmptyLineToken
-  | LyricsLineToken;
+  | LyricsLineToken
+  | TagLineToken;
 
 function emptyLineToken(): EmptyLineToken {
   return {
@@ -284,7 +285,7 @@ export function isTagLine(line: string) {
   return /^\[[^]*\]$/.test(line);
 }
 
-function tagToken(line: string): LyricsLineToken {
+function tagToken(line: string): TagLineToken {
   return {
     type: 'tagLine',
     value: line.slice(1, -1),
@@ -377,8 +378,15 @@ export function transpose(lines: LineToken[], tones: number) {
 }
 
 export function calcKeyDifference(key1: string, key2: string) {
-  const index1 = reverseIndex[key1.slice(0, 1)];
-  const index2 = reverseIndex[key2.slice(0, 1)];
+  const index1 = castExists(
+    reverseIndex[key1.slice(0, 1)],
+    `unknonwn key '${key1}'`,
+  );
+  const index2 = castExists(
+    reverseIndex[key2.slice(0, 1)],
+    `unknonwn key '${key2}'`,
+  );
+
   return (index2 - index1 + 12) % 12;
 }
 
@@ -390,12 +398,15 @@ export function isMinorKey(key: string) {
   return key.slice(-1) === 'm' && isMajorKey(key.slice(0, -1));
 }
 
-export function extractChords(lines: LineToken[]) {
+export function extractChords(lines: LineToken[]): string[] {
   const allChords = lines
-    .filter((line) => line.type === 'chordsAndLyricsLine')
+    .filter(
+      (line): line is chordsAndLyricsLineToken =>
+        line.type === 'chordsAndLyricsLine',
+    )
     .flatMap((line) => line.value)
     .map((value) => value.chord)
-    .filter((chord) => chord !== '');
+    .filter((chord): chord is string => chord !== '' && chord !== undefined);
 
   return [...new Set(allChords)].sort();
 }
@@ -403,7 +414,7 @@ export function extractChords(lines: LineToken[]) {
 const baseChordRegex = /^[A-H]#?m?/i;
 
 export function extractBaseChord(chord: string) {
-  return chord.replace('maj', '').match(baseChordRegex)[0];
+  return castExists(chord.replace('maj', '').match(baseChordRegex))[0];
 }
 export function extractBaseChords(chords: string[]) {
   return chords.map(extractBaseChord);

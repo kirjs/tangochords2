@@ -5,6 +5,8 @@ import {
   type LineToken,
 } from './chords';
 
+import { assert } from './asserts';
+
 export const chordHardness = {
   A: 1,
   'A#': 3,
@@ -38,13 +40,27 @@ export function calculateKeyScore(chords: string[]) {
   return calculateSumScore(chords) / chords.length;
 }
 
+type KnownChord = keyof typeof chordHardness;
+
+function assertKnownChord(chord: string): asserts chord is KnownChord {
+  assert(chord in chordHardness, `uknown chord ${chord}`);
+}
+
 export function calculateSumScore(chords: string[]) {
-  return chords.map((chord) => chordHardness[chord]).reduce((a, b) => a + b, 0);
+  return chords
+    .filter((chord): chord is KnownChord => {
+      assertKnownChord(chord);
+      return true;
+    })
+    .map((chord: KnownChord) => {
+      return chordHardness[chord];
+    })
+    .reduce((a, b) => a + b, 0);
 }
 
 export function calculateScoresForAllKeys(chords: string[]) {
   return Array(12)
-    .fill()
+    .fill(undefined)
     .map((_, shift) => {
       const transposedChords = transposeChords(chords, shift);
       return {

@@ -13,6 +13,7 @@ const songsCollection = defineCollection({
     text: z.string().optional(),
   }),
 });
+
 // Export a single `collections` object to register your collection(s)
 export const collections = {
   songs_ru: songsCollection,

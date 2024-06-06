@@ -1,3 +1,5 @@
+import { type LineToken } from './chords';
+
 function getTagName(tag: string) {
   if (/verse/i.test(tag)) {
     return 'tag-verse';
@@ -22,18 +24,29 @@ function getTagName(tag: string) {
   return 'tag-verse';
 }
 
-function attachTags(lines: LineItem[]): LineItem[] {
+export type TokenTag =
+  | 'tag-verse'
+  | 'tag-chorus'
+  | 'tag-intro'
+  | 'tag-bridge'
+  | 'tag-outro';
+
+export type TaggedLineToken = LineToken & {
+  tag: TokenTag;
+};
+
+function attachTags(lines: LineToken[]): TaggedLineToken[] {
   let currentTag = 'tag-verse';
 
   return lines.map((item) => {
     if (item.type === 'tagLine') {
       currentTag = getTagName(item.value);
     }
-    return { tag: currentTag, ...item };
+    return { tag: currentTag, ...item } as TaggedLineToken;
   });
 }
 
-function markSectionEnd(lines) {
+function markSectionEnd(lines: TaggedLineToken[]) {
   return lines.map((line, index) => {
     const nextLine = lines[index + 1];
 
@@ -44,13 +57,14 @@ function markSectionEnd(lines) {
   });
 }
 
-function dropRedundantEmptyLinesData(lines: LineItem[]) {
+function dropRedundantEmptyLinesData(lines: LineToken[]) {
+  const set = new Set(['emptyLine', 'tagLine']);
+
   return lines.filter((item, index, array) => {
     if (item.type === 'emptyLine') {
-      const nextItem = array[index + 1];
-      const set = new Set(['emptyLine', 'tagLine']);
+      const nextItem = array[index + 1];      
       // Drop if it is next to another emptyLine
-      return !set.has(nextItem?.type);
+      return !set.has(nextItem?.type || '');
     }
 
     // Keep all other items
@@ -58,7 +72,7 @@ function dropRedundantEmptyLinesData(lines: LineItem[]) {
   });
 }
 
-export function tagLines(lines: LineItem[]): LineItem[] {
+export function tagLines(lines: LineToken[]): LineToken[] {
   console.log(markSectionEnd(attachTags(lines)));
   return markSectionEnd(attachTags(dropRedundantEmptyLinesData(lines)));
 }

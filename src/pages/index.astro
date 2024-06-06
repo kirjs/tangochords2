@@ -2,13 +2,14 @@
 import Layout from '../layouts/Layout.astro';
 import {songsCollection} from "../content/collections";
 import Select from '../components/Select.svelte';
+import SongList from '../components/SongList.astro';
 
-const songs = songsCollection;
 ---
 
 <Layout title="Meow">
     <main>
-        <Select songs={songs} client:only></Select>
+        <Select songs={songsCollection} client:only></Select>
+        <SongList songs={songsCollection}></SongList>
     </main>
 </Layout>
 

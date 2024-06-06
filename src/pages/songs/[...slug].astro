@@ -1,6 +1,12 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import {songsCollection} from "../../content/collections";
 import SongLayout from '../../layouts/SongLayout.astro';
+
+
+interface Props {
+    entry: CollectionEntry<'songs_ru'>;
+}
 
 export async function getStaticPaths() {
     const songs = songsCollection;
