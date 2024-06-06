@@ -1,0 +1,15 @@
+---
+import { castExists } from '../../chords/asserts';
+import { songsCollection } from '../../content/collections';
+
+
+const randomSongIndex = Math.floor(Math.random() * songsCollection.length);
+console.log(randomSongIndex)
+const randomSong = castExists(songsCollection[randomSongIndex]);
+const slug = randomSong.slug;
+console.log(slug)
+
+
+
+return Astro.redirect(`/songs/${slug}`);
+---

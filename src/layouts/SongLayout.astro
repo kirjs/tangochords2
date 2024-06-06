@@ -1,30 +1,32 @@
 ---
-import type {CollectionEntry} from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import Layout from './Layout.astro';
 
 import Select from '../components/Select.svelte';
 import VSong from '../components/VSong.vue';
 
-import {songsCollection} from "../content/collections";
-
+import { songsCollection } from '../content/collections';
 
 const songs = songsCollection;
 
-
 interface Props {
-    song: CollectionEntry<'songs_ru'>;
+  song: CollectionEntry<'songs_ru'>;
 }
 
+const { song } = Astro.props;
 
-const {song} = Astro.props;
-
-const {title} = song.data;
+const { title } = song.data;
 ---
+
 <Layout title={title}>
-    <Select songs={songs} client:only></Select>
-    <h1><a href="/" style="text-decoration: none">🏡</a> {title}</h1>
-    
-    <article class='max-w-2xl mx-auto'>         
-        <VSong song={song} client:load></VSong>
-    </article>
+  <Select songs={songs} client:only />
+  <h1>
+    <a href="/" style="text-decoration: none">🏡</a>
+    <a href="/songs/random" style="text-decoration: none">🔀</a>
+    {title}
+  </h1>
+
+  <article class="max-w-2xl mx-auto">
+    <VSong song={song} client:load />
+  </article>
 </Layout>
