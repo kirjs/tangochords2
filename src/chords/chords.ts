@@ -377,15 +377,16 @@ export function transpose(lines: LineToken[], tones: number) {
   });
 }
 
+function getChordIndex(key: string) {
+  return castExists(
+    reverseIndex[key.replace('m', '')],
+    `unknown key '${key}'`,
+  );
+}
+
 export function calcKeyDifference(key1: string, key2: string) {
-  const index1 = castExists(
-    reverseIndex[key1.slice(0, 1)],
-    `unknonwn key '${key1}'`,
-  );
-  const index2 = castExists(
-    reverseIndex[key2.slice(0, 1)],
-    `unknonwn key '${key2}'`,
-  );
+  const index1 = getChordIndex(key1);
+  const index2 = getChordIndex(key2);
 
   return (index2 - index1 + 12) % 12;
 }

@@ -146,6 +146,7 @@ describe('auto-transpose', () => {
     expect(calcKeyDifference('C', 'D')).toBe(2);
     expect(calcKeyDifference('D', 'C')).toBe(10);
     expect(calcKeyDifference('C', 'C')).toBe(0);
+    expect(calcKeyDifference('A#m', 'Am')).toBe(11);
   });
 
   test('transpose chords', () => {

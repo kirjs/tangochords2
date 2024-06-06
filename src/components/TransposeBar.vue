@@ -1,44 +1,49 @@
 <template>
   <div class="bar">
-    <button @click="transposeUp">
-      <svg
-        width="12"
-        height="12"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
+    <div class="up-down panel">
+      <button @click="transposeUp">
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M12 4L4 12H8V20H16V12H20L12 4Z" fill="currentColor" />
+        </svg>
+      </button>
+      <span class="key">{{
+        props.songKey ?? (props.shift > 0 ? '+' : '') + props.shift
+      }}</span>
+      <button @click="transposeDown">
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M12 20L20 12H16V4H8V12H4L12 20Z" fill="currentColor" />
+        </svg>
+      </button>
+    </div>
+    <div class="tones panel" v-if="simpleKeys.length">
+      <button
+        v-for="k of simpleKeys"
+        :key="k"
+        @click="() => transposeTo(k)"
+        :disabled="props.songKey === k"
       >
-        <path d="M12 4L4 12H8V20H16V12H20L12 4Z" fill="currentColor" />
-      </svg>
-    </button>
-    <span class="key">{{ props.songKey ?? '?' }}</span>
-    <button @click="transposeDown">
-      <svg
-        width="12"
-        height="12"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
+        {{ k }}
+      </button>
+      <button
+        v-if="magicKey"
+        @click="() => transposeByNTones(magicKey.shift)"
+        :disabled="magicKey.shift === 0"
       >
-        <path d="M12 20L20 12H16V4H8V12H4L12 20Z" fill="currentColor" />
-      </svg>
-    </button>
-    |
-    <button
-      v-for="k of simpleKeys" 
-      :key="k"
-      @click="() => transposeTo(k)"
-      :disabled="props.songKey === k"
-    >
-      {{ k }}
-    </button>
-    <button
-      v-if="magicKey"
-      @click="() => transposeByNTones(magicKey.shift)"
-      :disabled="magicKey.shift === 0"
-    >
-      {{ magicKey.chordName }}
-    </button>
+        {{ magicKey.chordName }}
+      </button>
+    </div>
   </div>
 </template>
 
@@ -77,7 +82,6 @@ const simpleKeys = computed(() => {
   }
 
   return [];
-
 });
 
 const transposeUp = () => {
@@ -89,7 +93,8 @@ const transposeByNTones = (n) => {
 };
 
 const transposeTo = (newKey) => {
-  emit('update:shift', calcKeyDifference(props.songKey, newKey));
+  console.log(props.songKey, calcKeyDifference(props.songKey, newKey), props.shift);
+  transposeByNTones(calcKeyDifference(props.songKey, newKey));
 };
 
 const transposeDown = () => {
@@ -110,17 +115,23 @@ const magicKey = computed(() => {
 
 <style scoped lang="scss">
 .bar {
-  padding: 8px;
-  border-radius: 8px;
-
   display: flex;
-  align-items: center;
-  background: rgb(225, 235, 255);
-  font-size: 13px;
+  gap: 8px;
+
+  .panel {
+    padding: 4px;
+    display: flex;
+    border-radius: 8px;
+    background: rgb(225, 235, 255);
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+  }
 
   button {
     background: transparent;
     padding: 8px;
+    border-radius: 8px;
     cursor: pointer;
     border: 0 solid;
 
@@ -131,9 +142,11 @@ const magicKey = computed(() => {
 
   .key {
     font-size: 13px;
-    padding: 8px 0px;
+    padding: 8px;
     display: block;
     border-radius: 4px;
+    min-width: 24px;
+    text-align: center;
 
     cursor: pointer;
   }
