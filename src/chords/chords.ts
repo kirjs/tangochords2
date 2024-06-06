@@ -377,7 +377,7 @@ export function transpose(lines: LineToken[], tones: number) {
   });
 }
 
-function getChordIndex(key: string) {
+export function getChordIndex(key: string) {
   return castExists(
     reverseIndex[key.replace('m', '')],
     `unknown key '${key}'`,

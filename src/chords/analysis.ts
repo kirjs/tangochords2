@@ -1,7 +1,9 @@
 import {
   transposeChords,
+  transposeChord,
   extractBaseChords,
   extractChords,
+  getChordIndex,
   type LineToken,
 } from './chords';
 
@@ -72,18 +74,28 @@ export function calculateScoresForAllKeys(chords: string[]) {
     });
 }
 
-export function analyzeSong(lines: LineToken[]) {
+export function analyzeSong(lines: LineToken[], songKey: string) {
   const baseChords = extractBaseChords(extractChords(lines));
 
-  const scores = calculateScoresForAllKeys(baseChords);
+  const scores = calculateScoresForAllKeys(baseChords).map((key) => {
+    if (!songKey) {
+      return key;
+    }
+    return { ...key, keyName: transposeChord(songKey, key.shift) };
+  });
 
   const result = scores
-    .sort((a, b) => a.shift - b.shift)
+    .sort((a, b) => {
+      if (!a.keyName || !b.keyName) {
+        return 1;
+      }
+      return getChordIndex(a.keyName) - getChordIndex(b.keyName);
+    })
     .sort((a, b) => a.score - b.score);
 
   return {
     bestKey: result[0],
-    worstKey: result[result.length - 1],
+    worstKey: result.at(-1),
     allKeys: result,
   };
 }

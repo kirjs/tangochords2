@@ -41,7 +41,7 @@
         @click="() => transposeByNTones(magicKey.shift)"
         :disabled="magicKey.shift === 0"
       >
-        {{ magicKey.chordName }}
+        {{ magicKey.chordName }} 🪄
       </button>
     </div>
   </div>
@@ -68,17 +68,29 @@ const props = defineProps({
 
 const emit = defineEmits(['update:shift']);
 
+const magicKey = computed(() => {
+  const {bestKey} = analyzeSong(props.transposedSong, props.songKey);
+  console.log(bestKey);
+
+  return {
+    chordName: props.songKey
+      ? transposeChord(props.songKey, bestKey.shift)
+      : undefined,
+    ...bestKey,
+  };
+});
+
 const simpleKeys = computed(() => {
   if (!props.songKey) {
     return [];
   }
 
   if (isMajorKey(props.songKey)) {
-    return ['C', 'G'];
+    return ['C', 'G'].filter((c) => c !== magicKey.value.chordName);
   }
 
   if (isMinorKey(props.songKey)) {
-    return ['Am', 'Em'];
+    return ['Am', 'Em'].filter((c) => c !== magicKey.value.chordName);
   }
 
   return [];
@@ -93,24 +105,12 @@ const transposeByNTones = (n) => {
 };
 
 const transposeTo = (newKey) => {
-  console.log(props.songKey, calcKeyDifference(props.songKey, newKey), props.shift);
   transposeByNTones(calcKeyDifference(props.songKey, newKey));
 };
 
 const transposeDown = () => {
   emit('update:shift', props.shift - 1);
 };
-
-const magicKey = computed(() => {
-  const { bestKey } = analyzeSong(props.transposedSong);
-
-  return {
-    chordName: props.songKey
-      ? transposeChord(props.songKey, bestKey.shift)
-      : undefined,
-    ...bestKey,
-  };
-});
 </script>
 
 <style scoped lang="scss">

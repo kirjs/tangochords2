@@ -2,6 +2,7 @@
 title: Кукла колдуна
 performer: Король и Шут
 source: https://amdm.ru/akkordi/korol_i_shut/23540/kukla_kolduna/
+key: Dm
 ---
 
 [Вступление]
