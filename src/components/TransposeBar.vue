@@ -27,7 +27,7 @@
         </svg>
       </button>
     </div>
-    <div class="tones panel" v-if="simpleKeys.length">
+    <div class="tones panel" v-if="simpleKeys.length || magicKey">
       <button
         v-for="k of simpleKeys"
         :key="k"
@@ -36,8 +36,7 @@
       >
         {{ k }}
       </button>
-      <button
-        v-if="magicKey"
+      <button        
         @click="() => transposeByNTones(magicKey.shift)"
         :disabled="magicKey.shift === 0"
       >
@@ -69,8 +68,7 @@ const props = defineProps({
 const emit = defineEmits(['update:shift']);
 
 const magicKey = computed(() => {
-  const {bestKey} = analyzeSong(props.transposedSong, props.songKey);
-  console.log(bestKey);
+  const {bestKey} = analyzeSong(props.transposedSong, 'Am');
 
   return {
     chordName: props.songKey

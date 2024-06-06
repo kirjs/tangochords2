@@ -73,6 +73,5 @@ function dropRedundantEmptyLinesData(lines: LineToken[]) {
 }
 
 export function tagLines(lines: LineToken[]): LineToken[] {
-  console.log(markSectionEnd(attachTags(lines)));
   return markSectionEnd(attachTags(dropRedundantEmptyLinesData(lines)));
 }
