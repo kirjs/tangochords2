@@ -79,7 +79,7 @@ export function analyzeSong(lines: LineToken[], songKey: string) {
 
   const scores = calculateScoresForAllKeys(baseChords).map((key) => {
     if (!songKey) {
-      return key;
+      return {key, keyName: undefined};
     }
     return { ...key, keyName: transposeChord(songKey, key.shift) };
   });

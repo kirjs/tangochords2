@@ -19,7 +19,7 @@ interface SongAnalysis {
 }
 
 function getSongStats(song: CollectionEntry<'songs_ru'>): SongAnalysis {
-  const analysis = analyzeSong(parseChords({ text: song.body }));
+  const analysis = analyzeSong(parseChords({ text: song.body }), song.keyName);
   const bestKey = analysis.bestKey!;
   const worstKey = analysis.worstKey!;
 

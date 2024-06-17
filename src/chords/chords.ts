@@ -321,7 +321,7 @@ function chordsAnLyrycsToken(
 }
 
 export function parseChords({ text }: ParseChordsConfig): LineToken[] {
-  assert(text && text.trim() !== '');
+  assert(text != undefined && text.trim() !== '');
   const lines = text.trim().split('\n');
 
   function parseLines([line, ...rest]: string[]): LineToken[] {
