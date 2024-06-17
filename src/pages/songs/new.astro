@@ -1,0 +1,61 @@
+---
+import * as fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+export const prerender = false;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+if (!import.meta.env.SSR) {
+  Astro.redirect('');
+}
+
+const requestFilePath = path.normalize(
+  path.join(__dirname, '..', '..', '..', 'scrap', 'request.txt'),
+);
+
+if (Astro.request.method === 'POST') {
+  const data = await Astro.request.formData();
+  const url = data.get('url');
+  if (url) {
+    fs.appendFileSync(requestFilePath, url + '\n');
+  }
+}
+
+const requests = fs
+  .readFileSync(requestFilePath, 'utf-8')
+  .toString()
+  .split('\n');
+---
+
+<form
+  id="new-song-form"
+  method="post"
+  action="/songs/new"
+  enctype="multipart/form-data"
+>
+  <label for="url-input"></label>
+  URL:
+
+  <div>
+    <input type="text" required #url-input name="url" />
+  </div>
+  <div>
+    <button>Submit</button>
+  </div>
+
+  <h2> Existing requests </h2>  
+  {requests.map(request => (
+    <div>{request}</div>
+  ))}
+
+</form>
+
+<style scoped>
+  input {
+    width: 400px;
+    padding: 8px;
+  }
+</style>

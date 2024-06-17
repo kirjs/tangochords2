@@ -3,5 +3,7 @@
   "compilerOptions": {
     "jsx": "preserve"
   },
-  "exclude": ["scrap"]
+  "exclude": ["scrap"],
+  "types": ["node"], // Add this line
+
 }

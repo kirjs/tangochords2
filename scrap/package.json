@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/scrap.ts",
+    "start": "ts-node src/scrap_requests.ts",
+    
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

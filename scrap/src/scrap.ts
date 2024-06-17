@@ -12,10 +12,12 @@ const hashUrl = (url: string): string => {
 async function getContentByUrl(url: string, cacheFileName: string) {
   console.log('getContentByUrl', cacheFileName);
   if (fs.existsSync(cacheFileName)) {
+    console.log('getting from cache', cacheFileName);
     return fs.readFileSync(cacheFileName, 'utf-8');
   }
 
-  throw 'fetchin';
+  console.log('fetching');
+  
   const result = (await axios.get(url)).data;
   fs.writeFileSync(cacheFileName, result);
   return result;
@@ -91,7 +93,6 @@ function generateContent(data: SongInfo) {
 }
 
 async function scrapChords(url: string, folder: string) {
-  try {
     const data = await fetchChords(url);
 
     const fileName = slugify(data.performer + ' - ' + data.title) + '.md';
@@ -99,14 +100,15 @@ async function scrapChords(url: string, folder: string) {
     const content = generateContent(data);
 
     fs.writeFileSync(path.join(folder, fileName), content);
-  } catch (e) {
-    console.log(e);
-  }
 }
 
 const relativePath = path.join(__dirname, '../../src/content/songs_ru');
 
-scrapChords(
-  'https://amdm.ru/akkordi/korol_i_shut/23540/kukla_kolduna/',
-  relativePath,
-);
+
+
+export function scrapUrl(url: string){
+  scrapChords(
+    url,
+    relativePath,
+  );
+}

@@ -6,6 +6,7 @@ import vue from '@astrojs/vue';
 // https://astro.build/config
 export default defineConfig({
   integrations: [svelte(), vue()],
+  output: 'hybrid',
   content: {
     contentCollections: {
       songs: {
