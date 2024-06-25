@@ -91,6 +91,6 @@ const relativePath = path.join(__dirname, '../../src/content/songs_ru');
 //https://amdm.ru/akkordi/korol_i_shut/23540/kukla_kolduna/
 // https://amdm.ru/akkordi/korol_i_shut/2860/lesnik/
 scrapChords(
-    'https://amdm.ru/akkordi/korol_i_shut/2860/lesnik/',
+    'https://amdm.ru/akkordi/aykcion/3363/ptica/',
     relativePath
 )
