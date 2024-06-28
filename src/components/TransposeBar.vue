@@ -43,12 +43,17 @@
         {{ magicKey.chordName }} 🪄
       </button>
     </div>
+
+    <div class="autoscroll panel" v-if="simpleKeys.length || magicKey">
+      <AutoScroll></AutoScroll>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { defineEmits, defineProps, computed } from 'vue';
 import { analyzeSong } from '../chords/analysis.ts';
+import AutoScroll from './AutoScroll.vue';
 import {
   transposeChord,
   isMajorKey,

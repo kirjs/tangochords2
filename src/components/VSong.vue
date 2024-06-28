@@ -1,10 +1,20 @@
 <template>
   <div class="wrapper">
-    <TransposeBar
-      :songKey="key"
-      v-model:shift="shift"
-      :transposedSong="transposedSong"
-    />
+    <div class="header">
+      <h1>
+        <a href="/" style="text-decoration: none">🏡</a>
+        {{song.data.title}}
+      </h1>
+
+      <div>
+        <TransposeBar
+        :songKey="key"
+        v-model:shift="shift"
+        :transposedSong="transposedSong"
+        />
+      </div>
+  </div>
+
     <div class="song">
       <div
         :class="[
@@ -50,6 +60,7 @@ import {
   transposeChord,  
 } from '../chords/chords.ts';
 import { computed, ref } from 'vue';
+import Select from './Select.svelte';
 import SongChord from './SongChord.vue';
 import { tagLines } from '../chords/tag_lines.ts';
 import TransposeBar from './TransposeBar.vue';
@@ -78,6 +89,20 @@ const key = computed(() => {
 <style scoped lang="scss">
 .wrapper {
   margin: auto;
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top:0;
+    background-color: white;
+    box-shadow: 0px 5px 5px #eee;
+
+    h1 {
+      margin: 8px;
+    }
+  }
 
   .song {
     font-family: monospace;
