@@ -62,25 +62,11 @@ import { tagLines } from "../chords/tag_lines.ts";
 import TransposeBar from "./TransposeBar.vue";
 
 const store = inject("song-store");
-const song = store.song.value;
-
-const shift = ref(0);
-
-const parsedSong = computed(() => {
-  return parseChords({ text: song.body });
-});
-
-const transposedSong = computed(() => {
-  return transpose(tagLines(parsedSong.value), shift.value);
-});
-
-const key = computed(() => {
-  if (song.data?.key) {
-    return transposeChord(song.data.key, shift.value);
-  } else {
-    return undefined;
-  }
-});
+const song = store.song;
+const parsedSong = store.parsedSong;
+const shift = store.shift;
+const transposedSong = store.transposedSong;
+const key = store.key;
 </script>
 
 <style scoped lang="scss">
