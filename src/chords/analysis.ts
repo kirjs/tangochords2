@@ -74,14 +74,14 @@ export function calculateScoresForAllKeys(chords: string[]) {
     });
 }
 
-export function analyzeSong(lines: LineToken[], songKey: string) {
+export function analyzeSong(lines: LineToken[], songKey?: string) {
   const baseChords = extractBaseChords(extractChords(lines));
 
   const scores = calculateScoresForAllKeys(baseChords).map((key) => {
     if (!songKey) {
-      return {key, keyName: undefined};
+      return {key, keyName: undefined, score: 0,  sumScore: 0};
     }
-    return { ...key, keyName: transposeChord(songKey, key.shift) };
+    return { ...key, keyName: transposeChord(songKey, key.shift), };
   });
 
   const result = scores

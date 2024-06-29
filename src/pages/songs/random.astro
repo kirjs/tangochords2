@@ -1,9 +1,0 @@
----
-import { castExists } from '../../chords/asserts';
-import { songsCollection } from '../../content/collections';
-
-const randomSongIndex = Math.floor(Math.random() * songsCollection.length);
-const randomSong = castExists(songsCollection[randomSongIndex]);
-const redirect = '/songs/' + randomSong.slug;
-return Astro.redirect(redirect);
----

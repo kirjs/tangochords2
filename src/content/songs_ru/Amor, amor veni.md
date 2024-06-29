@@ -1,6 +1,7 @@
 ---
 title: Amor, Amor Veni
 Performer: 7 раса
+key: C
 ---
 
 C      G      C

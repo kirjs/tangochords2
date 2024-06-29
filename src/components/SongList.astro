@@ -1,7 +1,7 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { analyzeSong } from '../chords/analysis';
-import { parseChords } from '../chords/chords';
+import type { CollectionEntry } from "astro:content";
+import { analyzeSong } from "../chords/analysis";
+import { parseChords } from "../chords/chords";
 
 const props = Astro.props;
 
@@ -18,8 +18,8 @@ interface SongAnalysis {
   };
 }
 
-function getSongStats(song: CollectionEntry<'songs_ru'>): SongAnalysis {
-  const analysis = analyzeSong(parseChords({ text: song.body }), song.keyName);
+function getSongStats(song: CollectionEntry<"songs_ru">): SongAnalysis {
+  const analysis = analyzeSong(parseChords({ text: song.body }), song.data.key);
   const bestKey = analysis.bestKey!;
   const worstKey = analysis.worstKey!;
 
@@ -41,7 +41,9 @@ const songs = props.songs.map(getSongStats);
     songs.map((song: SongAnalysis) => {
       return (
         <tr>
-          <td><a href={'songs/' + song.slug}>{song.title}</a></td>
+          <td>
+            <a href={"songs/" + song.slug}>{song.title}</a>
+          </td>
           <td>{song.complexityScore}</td>
           <td>{song.key}</td>
           <td>{song.sumScore}</td>
