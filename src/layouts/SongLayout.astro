@@ -6,6 +6,7 @@ import Select from "../components/Select.svelte";
 import VSong from "../components/VSong.vue";
 
 import { songsCollection } from "../content/collections";
+import Song from "../components/Song.vue";
 
 const songs = songsCollection;
 
@@ -21,5 +22,5 @@ const { title } = song.data;
 <Layout title={title}>
   <Select songs={songs} client:only />
 
-  <VSong song={song} client:load />
+  <Song song={song} client:load />
 </Layout>

@@ -3,17 +3,17 @@
     <div class="header">
       <h1>
         <a href="/" style="text-decoration: none">🏡</a>
-        {{song.data.title}}
+        {{ song.data.title }}
       </h1>
 
       <div>
         <TransposeBar
-        :songKey="key"
-        v-model:shift="shift"
-        :transposedSong="transposedSong"
+          :songKey="key"
+          v-model:shift="shift"
+          :transposedSong="transposedSong"
         />
       </div>
-  </div>
+    </div>
 
     <div class="song">
       <div
@@ -40,10 +40,10 @@
           <div class="tag">{{ line.value }}</div>
         </template>
         <template v-if="line.type === 'chordsAndLyricsLine'">
-          <div v-for="(item, index) in line.value" :key="index" >
+          <div v-for="(item, index) in line.value" :key="index">
             <div class="chord-or-spacer">
               <SongChord v-if="item.chord" :chord="item.chord"> </SongChord
-              >{{ ' '.repeat(Math.max(0, item.length - item.chord.length)) }}
+              >{{ " ".repeat(Math.max(0, item.length - item.chord.length)) }}
             </div>
             <div class="lyrics">{{ item.lyrics }}</div>
           </div>
@@ -54,18 +54,15 @@
 </template>
 
 <script setup>
-import {
-  parseChords,
-  transpose,
-  transposeChord,  
-} from '../chords/chords.ts';
-import { computed, ref } from 'vue';
-import Select from './Select.svelte';
-import SongChord from './SongChord.vue';
-import { tagLines } from '../chords/tag_lines.ts';
-import TransposeBar from './TransposeBar.vue';
+import { parseChords, transpose, transposeChord } from "../chords/chords.ts";
+import { computed, ref, inject } from "vue";
+import Select from "./Select.svelte";
+import SongChord from "./SongChord.vue";
+import { tagLines } from "../chords/tag_lines.ts";
+import TransposeBar from "./TransposeBar.vue";
 
-const { song } = defineProps(['song']);
+const store = inject("song-store");
+const song = store.song.value;
 
 const shift = ref(0);
 
@@ -95,7 +92,7 @@ const key = computed(() => {
     align-items: center;
     gap: 16px;
     position: sticky;
-    top:0;
+    top: 0;
     background-color: white;
     box-shadow: 0px 5px 5px #eee;
 
@@ -144,10 +141,10 @@ const key = computed(() => {
   }
 
   $tag-backgrounds: (
-    'verse': rgb(255, 248, 154),
-    'chorus': rgb(215, 255, 155),
-    'bridge': rgb(255, 232, 232),
-    'intro': rgb(240, 240, 240),
+    "verse": rgb(255, 248, 154),
+    "chorus": rgb(215, 255, 155),
+    "bridge": rgb(255, 232, 232),
+    "intro": rgb(240, 240, 240),
   );
 
   @each $tag, $color in $tag-backgrounds {
