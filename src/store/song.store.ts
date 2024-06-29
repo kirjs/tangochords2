@@ -1,6 +1,6 @@
 import { parseChords, transpose, transposeChord } from "../chords/chords";
 import { tagLines } from "../chords/tag_lines";
-import { computed, ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 
 export interface Song {
   title: string;
@@ -15,6 +15,7 @@ export const useSongStore = (data: any) => {
   });
 
   const key = computed(() => {
+    console.log(shift.value);
     if (song.value.data?.key) {
       return transposeChord(song.value.data.key, shift.value);
     } else {
@@ -26,12 +27,18 @@ export const useSongStore = (data: any) => {
     return transpose(tagLines(parsedSong.value), shift.value);
   });
 
+  const goUp = () => {
+    console.log(shift.value);
+    shift.value += 3;
+  };
+
   return {
     song,
     parsedSong,
     key,
     shift,
     transposedSong,
+    goUp,
   };
 };
 

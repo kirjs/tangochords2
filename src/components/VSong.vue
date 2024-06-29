@@ -7,31 +7,19 @@
       </h1>
 
       <div>
-        <TransposeBar
-          :songKey="key"
-          v-model:shift="shift"
-          :transposedSong="transposedSong"
-        />
+        <TransposeBar />
       </div>
     </div>
 
     <div class="song">
-      <div
-        :class="[
-          'line',
-          line.type,
-          line.tag,
-          line.sectionEnd ? 'section-end' : '',
-        ]"
-        v-for="line in transposedSong"
-        :key="line"
-      >
+      <div :class="[
+        'line',
+        line.type,
+        line.tag,
+        line.sectionEnd ? 'section-end' : '',
+      ]" v-for="line in transposedSong" :key="line">
         <template v-if="line.type === 'chordsLine'">
-          <SongChord
-            v-for="chord in line.value"
-            :key="chord"
-            :chord="chord.chord"
-          ></SongChord>
+          <SongChord v-for="chord in line.value" :key="chord" :chord="chord.chord"></SongChord>
         </template>
         <template v-if="line.type === 'lyricsLine'">
           {{ line.value }}
@@ -42,8 +30,8 @@
         <template v-if="line.type === 'chordsAndLyricsLine'">
           <div v-for="(item, index) in line.value" :key="index">
             <div class="chord-or-spacer">
-              <SongChord v-if="item.chord" :chord="item.chord"> </SongChord
-              >{{ " ".repeat(Math.max(0, item.length - item.chord.length)) }}
+              <SongChord v-if="item.chord" :chord="item.chord"> </SongChord>{{ " ".repeat(Math.max(0, item.length -
+                item.chord.length)) }}
             </div>
             <div class="lyrics">{{ item.lyrics }}</div>
           </div>
@@ -53,22 +41,16 @@
   </div>
 </template>
 
-<script setup>
-import { parseChords, transpose, transposeChord } from "../chords/chords.ts";
-import { computed, ref, inject } from "vue";
-import Select from "./Select.svelte";
+<script setup lang="ts">
+import { inject } from "vue";
+import { type SongStore } from "../store/song.store.ts";
 import SongChord from "./SongChord.vue";
-import { tagLines } from "../chords/tag_lines.ts";
-import TransposeBar from "./TransposeBar.vue";
 
-const store = inject("song-store");
-const song = store.song;
-const parsedSong = store.parsedSong;
-const shift = store.shift;
-const transposedSong = store.transposedSong;
-const key = store.key;
+import { castExists } from "../chords/asserts.ts";
+
+const { song, shift, transposedSong, key } = castExists(inject<SongStore>("song-store"));
+TransposeBar
 </script>
-
 <style scoped lang="scss">
 .wrapper {
   margin: auto;
@@ -133,11 +115,11 @@ const key = store.key;
     "intro": rgb(240, 240, 240),
   );
 
-  @each $tag, $color in $tag-backgrounds {
-    &.tag-#{$tag} {
-      background: $color;
-    }
+@each $tag, $color in $tag-backgrounds {
+  &.tag-#{$tag} {
+    background: $color;
   }
+}
 }
 
 .chords-and-lyrics-line {

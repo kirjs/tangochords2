@@ -5,37 +5,37 @@ import {
   extractChords,
   getChordIndex,
   type LineToken,
-} from './chords';
+} from "./chords";
 
-import { assert } from './asserts';
+import { assert } from "./asserts";
 
 export const chordHardness = {
   A: 1,
-  'A#': 3,
+  "A#": 3,
   B: 3,
   H: 2,
   C: 1,
-  'C#': 4,
+  "C#": 4,
   D: 1,
-  'D#': 4,
+  "D#": 4,
   E: 1,
   F: 2,
-  'F#': 2,
+  "F#": 2,
   G: 1,
-  'G#': 4,
+  "G#": 4,
   Am: 1,
-  'A#m': 2,
+  "A#m": 2,
   Bm: 1,
   Hm: 2,
   Cm: 3,
-  'C#m': 4,
+  "C#m": 4,
   Dm: 1,
-  'D#m': 4,
+  "D#m": 4,
   Em: 1,
   Fm: 2,
-  'F#m': 2,
+  "F#m": 2,
   Gm: 3,
-  'G#m': 4,
+  "G#m": 4,
 };
 
 export function calculateKeyScore(chords: string[]) {
@@ -74,14 +74,36 @@ export function calculateScoresForAllKeys(chords: string[]) {
     });
 }
 
-export function analyzeSong(lines: LineToken[], songKey?: string) {
+export interface SongAnalysis {
+  body: string;
+  title: string;
+  slug: string;
+  key: string | undefined;
+  complexityScore: string | number;
+  sumScore: number;
+  worstKey?: {
+    sumScore: number;
+    score: number;
+  };
+  bestKey: {
+    sumScore: number;
+    score: number;
+    shift: number;
+  };
+  // TOOD(kirjs)
+  allKeys?: any;
+}
+export function analyzeSong(
+  lines: LineToken[],
+  songKey?: string,
+): SongAnalysis {
   const baseChords = extractBaseChords(extractChords(lines));
 
   const scores = calculateScoresForAllKeys(baseChords).map((key) => {
     if (!songKey) {
-      return {key, keyName: undefined, score: 0,  sumScore: 0};
+      return { key, keyName: undefined, score: 0, sumScore: 0, shift: 0 };
     }
-    return { ...key, keyName: transposeChord(songKey, key.shift), };
+    return { ...key, keyName: transposeChord(songKey, key.shift) };
   });
 
   const result = scores
