@@ -9,30 +9,14 @@ export interface Song {
 }
 
 export const useSongStore = (data: CollectionEntry<"songs_ru">) => {
-  const song = ref({ ...data });
-  const shift = useLocalStorage(`shift-${data.slug}`, 0);
+  const song = ref(data);
 
   const parsedSong = computed(() => {
     return parseChords({ text: song.value.body });
   });
 
-  const key = computed(() => {
-    if (song.value.data?.key) {
-      return transposeChord(song.value.data.key, shift.value);
-    } else {
-      return undefined;
-    }
-  });
-
-  const transposedSong = computed(() => {
-    return transpose(tagLines(parsedSong.value), shift.value);
-  });
-
   return {
     song,
     parsedSong,
-    key,
-    shift,
-    transposedSong,
   };
 };

@@ -6,10 +6,9 @@
           <path d="M12 4L4 12H8V20H16V12H20L12 4Z" fill="currentColor" />
         </svg>
       </button>
-      [{{ shift }}]
       <span class="key">{{
         key ?? (shift > 0 ? '+' : '') + shift
-        }}</span>
+      }}</span>
       <button @click="() => transposeTones(-1)">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 20L20 12H16V4H8V12H4L12 20Z" fill="currentColor" />
@@ -17,6 +16,7 @@
       </button>
     </div>
     <div class="tones panel" v-if="simpleKeys.length || magicKey">
+
       <button v-for="k of simpleKeys" :key="k" @click="() => transposeToKey(k)" :disabled="key === k">
         {{ k }}
       </button>
@@ -33,20 +33,14 @@
 </template>
 
 <script setup lang="ts">
-import { inject, watch } from 'vue';
+import { inject } from 'vue';
 
 import { castExists } from '../../../chords/asserts';
-import type { useSongStore } from '../../../store/song.store';
 import type { useTransposeStore } from './transpose.store';
 
 
-const { magicKey, simpleKeys, transposeTones, transposeToKey } = castExists(inject<ReturnType<typeof useTransposeStore>>("transpose-store"));
-const { shift, key } = castExists(inject<ReturnType<typeof useSongStore>>("song-store"));
+const { shift, key, magicKey, simpleKeys, transposeTones, transposeToKey } = castExists(inject<ReturnType<typeof useTransposeStore>>("transpose-store"));
 
-console.log(shift.value, 'd');
-watch(() => shift.value, (newValue) => {
-  console.log('Shift changed:', newValue);
-});
 
 </script>
 
