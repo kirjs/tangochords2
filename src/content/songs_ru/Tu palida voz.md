@@ -9,18 +9,18 @@ key: Em
 ---
 
 [Verse 1]
-Em            Cdim  Em                 
+Em            F#dim   Em/G                 
 Te oí decir... adiós, adiós... 
-             E7            Am
+                     E7     Am
 Cerré los ojos y oculté el dolor...
-           B7                Em        
+                      B7       Em        
 Sentí tus pasos cruzando la tarde 
-Em7  C#dim      F#     Cdim B7
+Em7  Gdim      F#     F#dim B7
 y no te  atajaron mis manos cobardes.
 
-Em            Cdim   Em               
+Em           F#dim    Em               
 Mi corazón, lloró de amor 
-E7              Am
+                    E7      Am
 y en el silencio resonó tu voz,
            B7               Em      
 tu voz querida, lejana y perdida,
