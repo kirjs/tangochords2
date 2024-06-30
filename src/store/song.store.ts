@@ -8,6 +8,7 @@ export interface Song {
 }
 
 export const useSongStore = (data: CollectionEntry<"songs_ru">) => {
+  console.log("CRIATE SONG");
   const song = ref({ ...data });
   const shift = ref(0);
 
@@ -42,5 +43,3 @@ export const useSongStore = (data: CollectionEntry<"songs_ru">) => {
     goUp,
   };
 };
-
-export type SongStore = ReturnType<typeof useSongStore>;

@@ -43,13 +43,14 @@
 
 <script setup lang="ts">
 import { inject } from "vue";
-import { SongStore } from "../store/song.store.ts";
+
 import SongChord from "./SongChord.vue";
 import TransposeBar from "./header/TransposeBar/TransposeBar.vue";
 
 import { castExists } from "../chords/asserts.ts";
+import type { useSongStore } from "../store/song.store.ts";
 
-const { song, transposedSong } = castExists(inject<SongStore>("song-store"));
+const { song, transposedSong } = castExists(inject<ReturnType<typeof useSongStore>>("song-store"));
 </script>
 <style scoped lang="scss">
 .wrapper {

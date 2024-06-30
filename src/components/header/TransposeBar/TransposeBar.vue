@@ -33,16 +33,20 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue';
-import { SongStore } from '../../../store/song.store';
+import { inject, watch } from 'vue';
+
 import { castExists } from '../../../chords/asserts';
-import { TransposeStore } from './transpose.store';
+import type { useSongStore } from '../../../store/song.store';
+import type { useTransposeStore } from './transpose.store';
 
 
-const { magicKey, simpleKeys, transposeTones, transposeToKey } = castExists(inject<TransposeStore>("transpose-store"));
-const { shift, key } = castExists(inject<SongStore>("song-store"));
+const { magicKey, simpleKeys, transposeTones, transposeToKey } = castExists(inject<ReturnType<typeof useTransposeStore>>("transpose-store"));
+const { shift, key } = castExists(inject<ReturnType<typeof useSongStore>>("song-store"));
 
-
+console.log(shift.value, 'd');
+watch(() => shift.value, (newValue) => {
+  console.log('Shift changed:', newValue);
+});
 
 </script>
 

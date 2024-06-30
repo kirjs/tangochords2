@@ -10,7 +10,7 @@ import VSong from "./VSong.vue";
 
 const { song } = defineProps(["song"]);
 const songStore = useSongStore(song);
-provide("song-store", useSongStore(song));
+provide("song-store", songStore);
 provide("transpose-store", useTransposeStore(songStore));
 
 </script>
