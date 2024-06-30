@@ -8,7 +8,6 @@ export interface Song {
 }
 
 export const useSongStore = (data: CollectionEntry<"songs_ru">) => {
-  console.log("CRIATE SONG");
   const song = ref({ ...data });
   const shift = ref(0);
 
@@ -17,7 +16,6 @@ export const useSongStore = (data: CollectionEntry<"songs_ru">) => {
   });
 
   const key = computed(() => {
-    console.log(shift.value);
     if (song.value.data?.key) {
       return transposeChord(song.value.data.key, shift.value);
     } else {
@@ -29,17 +27,11 @@ export const useSongStore = (data: CollectionEntry<"songs_ru">) => {
     return transpose(tagLines(parsedSong.value), shift.value);
   });
 
-  const goUp = () => {
-    console.log(shift.value);
-    shift.value += 3;
-  };
-
   return {
     song,
     parsedSong,
     key,
     shift,
     transposedSong,
-    goUp,
   };
 };

@@ -42,7 +42,6 @@ export const useTransposeStore = (songStore: SongStore) => {
 
   const transposeTones = (n: number) => {
     shift.value += n;
-    goUp();
   };
 
   const transposeToKey = (newKey: string) => {
