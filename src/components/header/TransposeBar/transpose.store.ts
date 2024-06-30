@@ -1,6 +1,6 @@
 import { computed } from "vue";
 import { analyzeSong } from "../../../chords/analysis";
-import type { SongStore } from "../../../store/song.store";
+
 import {
   calcKeyDifference,
   isMajorKey,
@@ -9,10 +9,13 @@ import {
   type LineToken,
 } from "../../../chords/chords";
 import { castExists } from "../../../chords/asserts";
+import type { useSongStore } from "../../../store/song.store";
 
 // TODO: Why can't i just inject it?
-export const useTransposeStore = (songStore: SongStore) => {
-  const { shift, transposedSong, key, goUp } = songStore;
+export const useTransposeStore = (
+  songStore: ReturnType<typeof useSongStore>,
+) => {
+  const { shift, transposedSong, key } = songStore;
 
   const magicKey = computed(() => {
     const { bestKey } = analyzeSong(transposedSong.value as LineToken[], "Am");
@@ -41,7 +44,7 @@ export const useTransposeStore = (songStore: SongStore) => {
   });
 
   const transposeTones = (n: number) => {
-    shift.value += n;
+    shift.value = (shift.value + n + 12) % 12;
   };
 
   const transposeToKey = (newKey: string) => {
