@@ -1,18 +1,21 @@
-import {SongInfo} from "../common";
+import { SongInfo } from "../common";
 import cheerio from "cheerio";
 
 export function accordsProParser(html: string): SongInfo {
-    const $ = cheerio.load(html);
+  const $ = cheerio.load(html);
 
-    const header = $('.entry-title').text().trim();
-    const [_, performer, title] = header.match(/^(.*?)\s—\s(.*?):/)!
+  const header = $(".entry-title").text().trim();
+  const [, performer, title] = header.match(/^(.*?)\s—\s(.*?):/)!;
 
-    const chords = $('.chords').text().trim()
-        .replaceAll(/([\w А-Яа-я]{5,12}):\n/gi, '[$1]\n')
-        .replaceAll(/.*:.*см. табы и ноты.*\n/gi, '')
+  const chords = $(".chords")
+    .text()
+    .trim()
+    .replaceAll(/([\w А-Яа-я]{5,12}):\n/gi, "[$1]\n")
+    .replaceAll(/.*:.*см. табы и ноты.*\n/gi, "");
 
-
-    return {
-        title, performer, chords,
-    }
+  return {
+    title,
+    performer,
+    chords,
+  };
 }

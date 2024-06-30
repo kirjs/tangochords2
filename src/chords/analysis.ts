@@ -7,7 +7,7 @@ import {
   type LineToken,
 } from "./chords";
 
-import { assert } from "./asserts";
+import { assert, castExists } from "./asserts";
 
 export const chordHardness = {
   A: 1,
@@ -60,7 +60,18 @@ export function calculateSumScore(chords: string[]) {
     .reduce((a, b) => a + b, 0);
 }
 
-export function calculateScoresForAllKeys(chords: string[]) {
+export interface SongKey {
+  shift: number;
+  chords: string[];
+  score: number;
+  sumScore: number;
+  keyName?: string;
+}
+type ExactlyTwelve<T> = [T, T, T, T, T, T, T, T, T, T, T, T];
+
+export function calculateScoresForAllKeys(
+  chords: string[],
+): ExactlyTwelve<SongKey> {
   return Array(12)
     .fill(undefined)
     .map((_, shift) => {
@@ -71,40 +82,33 @@ export function calculateScoresForAllKeys(chords: string[]) {
         score: calculateKeyScore(transposedChords),
         sumScore: calculateSumScore(transposedChords),
       };
-    });
+    }) as ExactlyTwelve<SongKey>;
 }
 
-export interface SongAnalysis {
+export interface KeyAnalysis {
+  worstKey: SongKey;
+  bestKey: SongKey;
+  allKeys: ExactlyTwelve<SongKey>;
+}
+
+export interface SongAnalysis extends KeyAnalysis {
   body: string;
   title: string;
   slug: string;
   key: string | undefined;
   complexityScore: string | number;
   sumScore: number;
-  worstKey?: {
-    sumScore: number;
-    score: number;
-  };
-  bestKey: {
-    sumScore: number;
-    score: number;
-    shift: number;
-  };
-  // TOOD(kirjs)
-  allKeys?: any;
 }
-export function analyzeSong(
-  lines: LineToken[],
-  songKey?: string,
-): SongAnalysis {
+
+export function analyzeSong(lines: LineToken[], songKey?: string): KeyAnalysis {
   const baseChords = extractBaseChords(extractChords(lines));
 
   const scores = calculateScoresForAllKeys(baseChords).map((key) => {
     if (!songKey) {
-      return { key, keyName: undefined, score: 0, sumScore: 0, shift: 0 };
+      return { ...key };
     }
     return { ...key, keyName: transposeChord(songKey, key.shift) };
-  });
+  }) as SongKey[];
 
   const result = scores
     .sort((a, b) => {
@@ -113,11 +117,11 @@ export function analyzeSong(
       }
       return getChordIndex(a.keyName) - getChordIndex(b.keyName);
     })
-    .sort((a, b) => a.score - b.score);
+    .sort((a, b) => a.score - b.score) as ExactlyTwelve<SongKey>;
 
   return {
     bestKey: result[0],
-    worstKey: result.at(-1),
+    worstKey: castExists(result.at(-1)),
     allKeys: result,
   };
 }

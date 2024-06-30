@@ -3,10 +3,9 @@ import type { CollectionEntry } from "astro:content";
 import Layout from "./Layout.astro";
 
 import Select from "../components/Select.svelte";
-import VSong from "../components/VSong.vue";
 
 import { songsCollection } from "../content/collections";
-import Song from "../components/Song.vue";
+import ProviderWrapper from "../components/ProviderWrapper.vue";
 
 const songs = songsCollection;
 
@@ -22,5 +21,5 @@ const { title } = song.data;
 <Layout title={title}>
   <Select songs={songs} client:only />
 
-  <Song song={song} client:load />
+  <ProviderWrapper song={song} client:load />
 </Layout>

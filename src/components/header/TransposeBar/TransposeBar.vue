@@ -6,9 +6,10 @@
           <path d="M12 4L4 12H8V20H16V12H20L12 4Z" fill="currentColor" />
         </svg>
       </button>
+      [{{ shift }}]
       <span class="key">{{
-        props.songKey ?? (props.shift > 0 ? '+' : '') + props.shift
-      }}</span>
+        key ?? (shift > 0 ? '+' : '') + shift
+        }}</span>
       <button @click="() => transposeTones(-1)">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 20L20 12H16V4H8V12H4L12 20Z" fill="currentColor" />
@@ -16,7 +17,7 @@
       </button>
     </div>
     <div class="tones panel" v-if="simpleKeys.length || magicKey">
-      <button v-for="k of simpleKeys" :key="k" @click="() => transposeToKey(k)" :disabled="props.songKey === k">
+      <button v-for="k of simpleKeys" :key="k" @click="() => transposeToKey(k)" :disabled="key === k">
         {{ k }}
       </button>
       <button @click="() => transposeTones(magicKey.shift)" :disabled="magicKey.shift === 0">
@@ -32,31 +33,14 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps, inject, computed } from 'vue';
-import { analyzeSong } from '../../../chords/analysis.ts';
-
-import {
-  transposeChord,
-  isMajorKey,
-  isMinorKey,
-  calcKeyDifference,
-} from '../../../chords/chords.ts';
-
-const { magicKey, simpleKeys, transposeTones, transposeToKey } = inject("transpose-store");
-const { shift } = castExists(inject<SongStore>("song-store"));
+import { inject } from 'vue';
+import { SongStore } from '../../../store/song.store';
+import { castExists } from '../../../chords/asserts';
+import { TransposeStore } from './transpose.store';
 
 
-// const props = defineProps({
-//   songKey: String,
-//   shift: {
-//     type: Number,
-//     required: true,
-//   },
-//   transposedSong: Array,
-// });
-
-// const emit = defineEmits(['update:shift']);
-
+const { magicKey, simpleKeys, transposeTones, transposeToKey } = castExists(inject<TransposeStore>("transpose-store"));
+const { shift, key } = castExists(inject<SongStore>("song-store"));
 
 
 

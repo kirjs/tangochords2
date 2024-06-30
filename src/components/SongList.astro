@@ -19,6 +19,7 @@ function getSongStats(song: CollectionEntry<"songs_ru">): SongAnalysis {
     sumScore: bestKey.sumScore,
     worstKey,
     bestKey,
+    allKeys: analysis.allKeys,
   };
 }
 const songs = props.songs.map(getSongStats);

@@ -15,8 +15,8 @@
       <div :class="[
         'line',
         line.type,
-        line.tag,
-        line.sectionEnd ? 'section-end' : '',
+        'tag' in line && line.tag,
+        'sectionEnd' in line && line.sectionEnd ? 'section-end' : '',
       ]" v-for="line in transposedSong" :key="line">
         <template v-if="line.type === 'chordsLine'">
           <SongChord v-for="chord in line.value" :key="chord" :chord="chord.chord"></SongChord>
@@ -43,13 +43,13 @@
 
 <script setup lang="ts">
 import { inject } from "vue";
-import { type SongStore } from "../store/song.store.ts";
+import { SongStore } from "../store/song.store.ts";
 import SongChord from "./SongChord.vue";
+import TransposeBar from "./header/TransposeBar/TransposeBar.vue";
 
 import { castExists } from "../chords/asserts.ts";
 
-const { song, shift, transposedSong, key } = castExists(inject<SongStore>("song-store"));
-TransposeBar
+const { song, transposedSong } = castExists(inject<SongStore>("song-store"));
 </script>
 <style scoped lang="scss">
 .wrapper {

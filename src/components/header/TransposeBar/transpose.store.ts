@@ -1,4 +1,4 @@
-import { inject, computed } from "vue";
+import { computed } from "vue";
 import { analyzeSong } from "../../../chords/analysis";
 import type { SongStore } from "../../../store/song.store";
 import {
@@ -41,7 +41,6 @@ export const useTransposeStore = (songStore: SongStore) => {
   });
 
   const transposeTones = (n: number) => {
-    debugger;
     shift.value += n;
     goUp();
   };
@@ -52,3 +51,5 @@ export const useTransposeStore = (songStore: SongStore) => {
 
   return { magicKey, simpleKeys, transposeTones, transposeToKey };
 };
+
+export type TransposeStore = ReturnType<typeof useTransposeStore>;
