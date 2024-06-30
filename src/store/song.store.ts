@@ -1,8 +1,6 @@
 import type { CollectionEntry } from "astro:content";
-import { parseChords, transpose, transposeChord } from "../chords/chords";
-import { tagLines } from "../chords/tag_lines";
 import { computed, ref } from "vue";
-import { useLocalStorage } from "@vueuse/core";
+import { parseChords } from "../chords/chords";
 
 export interface Song {
   title: string;

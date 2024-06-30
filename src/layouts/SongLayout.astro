@@ -2,8 +2,6 @@
 import type { CollectionEntry } from "astro:content";
 import Layout from "./Layout.astro";
 
-import Select from "../components/Select.svelte";
-
 import { songsCollection } from "../content/collections";
 import ProviderWrapper from "../components/ProviderWrapper.vue";
 
@@ -19,7 +17,5 @@ const { title } = song.data;
 ---
 
 <Layout title={title}>
-  <Select songs={songs} client:only />
-
-  <ProviderWrapper song={song} client:load />
+  <ProviderWrapper song={song} songs={songs} client:only />
 </Layout>

@@ -1,16 +1,7 @@
 <template>
   <div class="wrapper">
-    <div class="header">
-      <h1>
-        <a href="/" style="text-decoration: none">🏡</a>
-        {{ song.data.title }}
-      </h1>
 
-      <div>
-        <TransposeBar />
-      </div>
-    </div>
-
+    <TransposeBar />
     <div class="song">
       <div :class="[
         'line',
@@ -60,21 +51,8 @@ const { transposedSong } = castExists(inject<ReturnType<typeof useTransposeStore
 .wrapper {
   margin: auto;
 
-  .header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    position: sticky;
-    top: 0;
-    background-color: white;
-    box-shadow: 0px 5px 5px #eee;
-
-    h1 {
-      margin: 8px;
-    }
-  }
-
   .song {
+    padding: 0 24px;
     font-family: monospace;
     display: table;
     width: auto;

@@ -1,5 +1,10 @@
 <template>
   <div class="bar">
+    <div class="title">
+      <a href="/" style="text-decoration: none" class="home">🏡</a>
+      <SongSelect client:only="vue"></SongSelect>
+    </div>
+
     <div class="up-down panel">
       <button @click="() => transposeTones(1)">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -8,7 +13,7 @@
       </button>
       <span class="key">{{
         key ?? (shift > 0 ? '+' : '') + shift
-      }}</span>
+        }}</span>
       <button @click="() => transposeTones(-1)">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 20L20 12H16V4H8V12H4L12 20Z" fill="currentColor" />
@@ -26,15 +31,16 @@
     </div>
 
     <div class="autoscroll panel" v-if="simpleKeys.length || magicKey">
-      TODO: autoscroll
-      <!-- <AutoScroll></AutoScroll> -->
+      <AutoScroll></AutoScroll>
     </div>
+
+
   </div>
 </template>
 
 <script setup lang="ts">
 import { inject } from 'vue';
-
+import SongSelect from '../SelectSong/SelectSong.vue';
 import { castExists } from '../../../chords/asserts';
 import type { useTransposeStore } from './transpose.store';
 
@@ -45,9 +51,23 @@ const { shift, key, magicKey, simpleKeys, transposeTones, transposeToKey } = cas
 </script>
 
 <style scoped lang="scss">
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .bar {
+  padding: 8px 24px;
   display: flex;
   gap: 8px;
+  margin-bottom: 16px;
+  position: sticky;
+  top: 0;
+  background: rgb(241, 245, 254);
+  box-shadow: 0px 0px 10px #a5a5a5;
+  ;
+
 
   .panel {
     padding: 4px;
