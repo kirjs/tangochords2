@@ -41,10 +41,8 @@ import SongChord from "./SongChord.vue";
 import TransposeBar from "./header/TransposeBar/TransposeBar.vue";
 
 import { castExists } from "../chords/asserts.ts";
-import type { useSongStore } from "../store/song.store.ts";
-import type { useTransposeStore } from "./header/TransposeBar/transpose.store.ts";
+import { useTransposeStore } from "./header/TransposeBar/transpose.store.ts";
 
-const { song } = castExists(inject<ReturnType<typeof useSongStore>>("song-store"));
 const { transposedSong } = castExists(inject<ReturnType<typeof useTransposeStore>>("transpose-store"));
 </script>
 <style scoped lang="scss">

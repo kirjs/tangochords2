@@ -1,11 +1,21 @@
-import globals from 'globals';
-import pluginJs from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import pluginVue from 'eslint-plugin-vue';
+import globals from "globals";
+import pluginJs from "@eslint/js";
+import tseslint from "typescript-eslint";
+import pluginVue from "eslint-plugin-vue";
+import typescriptParser from "@typescript-eslint/parser";
 
 export default [
   {
-    ignores: [ 'dist/**', '.firebase/**', '.astro/**'],
+    languageOptions: {
+      parser: typescriptParser,
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: "module",
+      },
+    },
+  },
+  {
+    ignores: ["dist/**", ".firebase/**", ".astro/**"],
   },
   {
     languageOptions: { globals: globals.browser },
@@ -13,6 +23,5 @@ export default [
   pluginJs.configs.recommended,
 
   ...tseslint.configs.recommended,
-  ...pluginVue.configs['flat/essential'],
- 
+  ...pluginVue.configs["flat/essential"],
 ];

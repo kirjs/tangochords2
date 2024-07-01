@@ -14,12 +14,17 @@ import { ref, onMounted, onBeforeUnmount, inject, watch } from 'vue';
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 import { castExists } from '../../../chords/asserts';
-import type { useSongsStore } from '../../../store/songs.store';
-import type { useSongStore } from '../../../store/song.store';
+import { useSongsStore } from '../../../store/songs.store';
+import { useSongStore } from '../../../store/song.store';
 
 const { songs } = castExists(inject<ReturnType<typeof useSongsStore>>('songs-store'));
 const { song } = castExists(inject<ReturnType<typeof useSongStore>>('song-store'));
 
+
+interface SelectItem {
+  value: string;
+  label: string;
+}
 
 
 const listOpen = ref(false);
@@ -29,13 +34,11 @@ const items = songs.value.map(song => ({
   label: song.data.title
 }));
 
-
-console.log(song.value);
-const selectedSong = ref<{ value: string; label: string } | null>(song.value && castExists(items.find(i => i.label === song.value.data.title)));
+const selectedSong = ref<SelectItem | null>(song.value && castExists(items.find(i => i.label === song.value.data.title)));
 
 watch(selectedSong, navigateToSong);
 
-function navigateToSong(song: { value: string; label: string } | null) {
+function navigateToSong(song: SelectItem | null) {
   if (song) {
     window.location.href = '/songs/' + song.value;
   }
