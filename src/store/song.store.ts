@@ -1,5 +1,5 @@
 import type { CollectionEntry } from "astro:content";
-import { computed, ref } from "vue";
+import { computed, ref, type InjectionKey } from "vue";
 import { parseChords } from "../chords/chords";
 
 export interface Song {
@@ -18,3 +18,7 @@ export const useSongStore = (data: CollectionEntry<"songs_ru">) => {
     parsedSong,
   };
 };
+
+export const songStoreInjectionKey = Symbol("song-store") as InjectionKey<
+  ReturnType<typeof useSongStore>
+>;

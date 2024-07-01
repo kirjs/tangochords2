@@ -21,6 +21,7 @@ const { songs } = castExists(inject<ReturnType<typeof useSongsStore>>('songs-sto
 const { song } = castExists(inject<ReturnType<typeof useSongStore>>('song-store'));
 
 
+
 const listOpen = ref(false);
 const selectRef = ref();
 const items = songs.value.map(song => ({
@@ -28,7 +29,9 @@ const items = songs.value.map(song => ({
   label: song.data.title
 }));
 
-const selectedSong = ref<{ value: string; label: string } | null>(castExists(items.find(i => i.label === song.value.data.title)));
+
+console.log(song.value);
+const selectedSong = ref<{ value: string; label: string } | null>(song.value && castExists(items.find(i => i.label === song.value.data.title)));
 
 watch(selectedSong, navigateToSong);
 

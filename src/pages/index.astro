@@ -1,18 +1,16 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import {songsCollection} from "../content/collections";
-import Select from '../components/Select.svelte';
-import SongList from '../components/SongList.astro';
+import Layout from "../layouts/Layout.astro";
 
+import ListHeader from "../components/header/ListHeader/ListHeader.vue";
+import SongList from "../components/SongList.astro";
+import { songsCollection } from "../content/collections";
 ---
 
 <Layout title="Meow">
-    <main>
-        <Select songs={songsCollection} client:only></Select>
-        <SongList songs={songsCollection}></SongList>
-    </main>
+  <main>
+    <ListHeader songs={songsCollection} client:only="vue" />
+    <SongList songs={songsCollection} />
+  </main>
 </Layout>
 
-<style>
-
-</style>
+<style></style>
