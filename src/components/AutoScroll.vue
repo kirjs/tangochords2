@@ -7,6 +7,7 @@
       {{ isPaused ? 'Resume' : 'Pause' }}
     </button>
     <span class="speed">{{ Math.round(scrollProgress * 100) }}%</span>
+    <input type="number" v-model="totalDuration" class="length">
     <div v-if="isScrolling" class="scroll-indicator" :style="indicatorStyle" @click="togglePause">
       <div class="inner-dot"></div>
     </div>
@@ -15,7 +16,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useLocalStorage } from '@vueuse/core';
+import { ref, computed, onMounted, onUnmounted, inject } from 'vue'
+import { castExists } from '../chords/asserts';
+import type { useSongStore } from '../store/song.store';
+const { song } = castExists(inject<ReturnType<typeof useSongStore>>('song-store'));
 
 const isScrolling = ref(false)
 const isPaused = ref(false)
@@ -23,7 +28,7 @@ const indicatorPosition = ref(0)
 const scrollProgress = ref(0)
 const windowHeight = ref(0)
 const documentHeight = ref(0)
-const totalDuration = 60 * 1000 // 60 seconds in milliseconds
+const totalDuration = useLocalStorage(`song.${song.value.slug}.length`, 90)
 let startTime: number | null = null
 let pauseStartTime: number | null = null
 let totalPausedTime = 0
@@ -105,7 +110,7 @@ const scrollStep = (timestamp: number) => {
   const elapsed = timestamp - startTime - totalPausedTime
 
   if (!isPaused.value && scrollProgress.value < 1) {
-    scrollProgress.value = Math.min(elapsed / totalDuration, 1)
+    scrollProgress.value = Math.min(elapsed / (totalDuration.value * 1000), 1)
 
     // Calculate indicator position consistently
     const totalDistance = midScreenPosition.value + (documentHeight.value - windowHeight.value)
@@ -193,5 +198,9 @@ button:disabled {
   width: 2px;
   height: calc(100vh - 60px);
   background-color: #ddd;
+}
+
+.length {
+  width: 40px;
 }
 </style>
