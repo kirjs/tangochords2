@@ -11,7 +11,7 @@
       ]" v-for="(line, i) in transposedSong" :key="i">
         <template v-if="line.type === 'chordsLine'">
           <template v-for="(chord, chordIndex) in line.value" :key="chordIndex">
-            <SongChord v-if="chord.chord" :chord="chord.chord"></SongChord>
+            <SongChord v-if="chord.chord" :chord="chord.chord" :index="chord.chordIndex" ></SongChord>
           </template>
         </template>
         <template v-if="line.type === 'lyricsLine'">
@@ -23,7 +23,7 @@
         <template v-if="line.type === 'chordsAndLyricsLine'">
           <div v-for="(item, index) in line.value" :key="index">
             <div class="chord-or-spacer">
-              <SongChord v-if="item.chord" :chord="item.chord"> </SongChord>{{ " ".repeat(Math.max(0, item.length -
+              <SongChord v-if="item.chord" :chord="item.chord" :index="item.chordIndex"> </SongChord>{{ " ".repeat(Math.max(0, item.length -
                 (item.chord ? item.chord.length : 0))) }}
             </div>
             <div class="lyrics">{{ item.lyrics }}</div>

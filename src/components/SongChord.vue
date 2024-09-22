@@ -3,8 +3,10 @@ import { computed } from 'vue';
 
 const { chord } = defineProps({
   chord: String,
+  index: Number
 });
 
+ 
 const hasChord = computed(() => {
   return chord?.trim() !== '';
 });

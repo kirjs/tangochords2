@@ -1,7 +1,7 @@
-import { castExists, assert } from './asserts';
+import { castExists, assert } from "./asserts";
 
 const chordBase =
-  '[A-H][\\#b]?(?:m|Minor|Major)?(5|9b5|6add9|maj|maj7|maj9|maj11|maj13|maj9#11|maj13#11|6|add9|maj7b5|maj7#5||min|m7|m9|m11|m13|m6|madd9|m6add9|mmaj7|mmaj9|m7b5|m7#5|7|9|11|13|7sus4|7b5|7#5|7b9|7#9|7b5b9|7b5#9|7#5b9|9#5|13#11|13b9|11b9|aug|dim|dim7|sus4|sus2|sus2sus4|-5|7h5)?(?:/[A-H][\\#b]?)?';
+  "[A-H][\\#b]?(?:m|Minor|Major)?(5|9b5|6add9|maj|maj7|maj9|maj11|maj13|maj9#11|maj13#11|6|add9|maj7b5|maj7#5||min|m7|m9|m11|m13|m6|madd9|m6add9|mmaj7|mmaj9|m7b5|m7#5|7|9|11|13|7sus4|7b5|7#5|7b9|7#9|7b5b9|7b5#9|7#5b9|9#5|13#11|13b9|11b9|aug|dim|dim7|sus4|sus2|sus2sus4|-5|7h5)?(?:/[A-H][\\#b]?)?";
 
 /**
  * This is a regex for the main Note of the chord.
@@ -13,18 +13,18 @@ const noteRegex = /([A-H]#?)/g;
  * We need this index to figure out which note comes after which.
  */
 const noteIndex: string[] = [
-  'A',
-  'A#',
-  'H',
-  'C',
-  'C#',
-  'D',
-  'D#',
-  'E',
-  'F',
-  'F#',
-  'G',
-  'G#',
+  "A",
+  "A#",
+  "H",
+  "C",
+  "C#",
+  "D",
+  "D#",
+  "E",
+  "F",
+  "F#",
+  "G",
+  "G#",
 ];
 
 /**
@@ -32,18 +32,18 @@ const noteIndex: string[] = [
  */
 const reverseIndex: Record<string, number> = {};
 for (let i = 0, l = noteIndex.length; i < l; i++) {
-  reverseIndex[noteIndex[i] || 'A'] = i;
+  reverseIndex[noteIndex[i] || "A"] = i;
 }
 
 /**
  * Some synonyms also go here.
  */
-reverseIndex['B'] = 2;
-reverseIndex['B#'] = 3;
-reverseIndex['H#'] = 3;
-reverseIndex['E#'] = 8;
+reverseIndex["B"] = 2;
+reverseIndex["B#"] = 3;
+reverseIndex["H#"] = 3;
+reverseIndex["E#"] = 8;
 
-const chordLineRegex = new RegExp('^\\s*(' + chordBase + '\\s*)+$');
+const chordLineRegex = new RegExp("^\\s*(" + chordBase + "\\s*)+$");
 
 /**
  * Returns true is line consists of chords only.
@@ -67,14 +67,15 @@ function isChordLine(line: string) {
 export function transposeChord(chord: string, steps: number) {
   steps = +steps;
   return chord.replace(noteRegex, (note: string) => {
-    if (!note || typeof reverseIndex[note] === 'undefined') {
+    if (!note || typeof reverseIndex[note] === "undefined") {
       return "Can't transpose chord '" + chord + "'";
     }
 
     const newIndex = ((reverseIndex[note] || 0) + steps + 12) % 12;
-    return noteIndex[newIndex] || '';
+    return noteIndex[newIndex] || "";
   });
 }
+
 export function transposeChords(chords: string[], steps: number) {
   return chords.map((chord) => transposeChord(chord, steps));
 }
@@ -91,7 +92,7 @@ export class ChordManager {
     /**
      *  This regex is used to match and replace chords.
      */
-    chord: new RegExp('\\b(' + chordBase + ')\\s', 'g'),
+    chord: new RegExp("\\b(" + chordBase + ")\\s", "g"),
     /**
      *  This regex is used to find line which ends with a word.
      */
@@ -103,9 +104,9 @@ export class ChordManager {
    * @param line
    */
   private wrapChordsInLine(line: string, transposeTones: number) {
-    return (line + ' ').replace(this.regex.chord, (_, chord) => {
+    return (line + " ").replace(this.regex.chord, (_, chord) => {
       const transposedChord = transposeChord(chord, +transposeTones);
-      return '<span class = "chord">' + transposedChord + '</span>';
+      return '<span class = "chord">' + transposedChord + "</span>";
     });
   }
 
@@ -113,7 +114,7 @@ export class ChordManager {
    * If the line cut by %lineLength% symbols ends with a word, we substitute it and return new line length.
    */
   private wrapLength(line: string, lineLength: number): number {
-    const lastPart = (line + ' ')
+    const lastPart = (line + " ")
       .slice(0, lineLength)
       .match(this.regex.wordAtTheEndOfTheLine);
 
@@ -157,10 +158,10 @@ export class ChordManager {
       return (
         '<p class = "chords">' +
         this.wrapChordsInLine(chordLine.slice(0, lineLength), transposeTones) +
-        '</p>' +
-        '<p>' +
+        "</p>" +
+        "<p>" +
         textLine.slice(0, lineLength) +
-        '</p>' +
+        "</p>" +
         this.breakLongLines(
           chordLine.slice(0, lineLength),
           textLine.slice(0, lineLength),
@@ -170,7 +171,7 @@ export class ChordManager {
       );
     }
 
-    return '';
+    return "";
   }
 
   /**
@@ -191,14 +192,14 @@ export class ChordManager {
    * keeping chords above the text
    */
 
-  wrapChords({ text = '', lineLength = 80, transposeTones = 0 }) {
-    let result = '';
+  wrapChords({ text = "", lineLength = 80, transposeTones = 0 }) {
+    let result = "";
     const lines = text.trim().split(/[\n\r]{1,2}/);
     lineLength = lineLength || 50;
 
     for (let i = 0, l = lines.length - 1; i < l; i++) {
       const line = lines[i];
-      const nextLine = lines[i + 1] || '';
+      const nextLine = lines[i + 1] || "";
       if (!line) {
         result += '<div class = "chordLine"></div>';
         continue;
@@ -215,9 +216,9 @@ export class ChordManager {
         );
         i++;
       } else {
-        result += this.breakLongLines(line, '', lineLength, transposeTones);
+        result += this.breakLongLines(line, "", lineLength, transposeTones);
       }
-      result += '</div>';
+      result += "</div>";
     }
     return result;
   }
@@ -234,21 +235,21 @@ interface ChordLineValueToken {
 }
 
 interface chordsAndLyricsLineToken {
-  type: 'chordsAndLyricsLine';
+  type: "chordsAndLyricsLine";
   value: ChordLineValueToken[];
 }
 
 interface EmptyLineToken {
-  type: 'emptyLine';
+  type: "emptyLine";
 }
 
 interface LyricsLineToken {
-  type: 'lyricsLine';
+  type: "lyricsLine";
   value: string;
 }
 
 interface TagLineToken {
-  type: 'tagLine';
+  type: "tagLine";
   value: string;
 }
 
@@ -257,7 +258,7 @@ interface ChordsLineTokenValueToken {
 }
 
 interface ChordsLineToken {
-  type: 'chordsLine';
+  type: "chordsLine";
   value: ChordsLineTokenValueToken[];
 }
 
@@ -270,13 +271,13 @@ export type LineToken =
 
 function emptyLineToken(): EmptyLineToken {
   return {
-    type: 'emptyLine',
+    type: "emptyLine",
   };
 }
 
 function lyricsToken(line: string): LyricsLineToken {
   return {
-    type: 'lyricsLine',
+    type: "lyricsLine",
     value: line,
   };
 }
@@ -287,48 +288,48 @@ export function isTagLine(line: string) {
 
 function tagToken(line: string): TagLineToken {
   return {
-    type: 'tagLine',
+    type: "tagLine",
     value: line.slice(1, -1),
   };
 }
 
 function chordsLineToken(line: string): chordsAndLyricsLineToken {
-  return chordsAnLyrycsToken(line, '');
+  return chordsAnLyrycsToken(line, "");
 }
 
 function chordsAnLyrycsToken(
   chords: string,
   lyrics: string,
 ): chordsAndLyricsLineToken {
-  const parts = chords.padEnd(lyrics.length, ' ').matchAll(/\s+|(\S+)\s*/g);
+  const parts = chords.padEnd(lyrics.length, " ").matchAll(/\s+|(\S+)\s*/g);
 
   const result: ChordLineValueToken[] = [];
 
   let shift = 0;
-  for (const [part = '', chord] of parts) {
+  for (const [part = "", chord] of parts) {
     result.push({
       length: part.length,
-      chord: chord ?? '',
+      chord: chord ?? "",
       lyrics: lyrics.slice(shift, shift + part.length),
     });
     shift += part.length;
   }
 
   return {
-    type: 'chordsAndLyricsLine',
+    type: "chordsAndLyricsLine",
     value: result,
   };
 }
 
 export function parseChords({ text }: ParseChordsConfig): LineToken[] {
-  assert(text != undefined && text.trim() !== '');
-  const lines = text.trim().split('\n');
+  assert(text != undefined && text.trim() !== "");
+  const lines = text.trim().split("\n");
 
   function parseLines([line, ...rest]: string[]): LineToken[] {
     if (line === undefined) {
       return [];
     }
-    if (line.trim() === '') {
+    if (line.trim() === "") {
       return [emptyLineToken(), ...parseLines(rest)];
     }
 
@@ -355,7 +356,7 @@ export function parseChords({ text }: ParseChordsConfig): LineToken[] {
 export function transpose(lines: LineToken[], tones: number) {
   tones = (tones + 12) % 12;
   return lines.map((line) => {
-    if (line.type === 'chordsLine' || line.type === 'chordsAndLyricsLine') {
+    if (line.type === "chordsLine" || line.type === "chordsAndLyricsLine") {
       return {
         ...line,
         value: line.value.map((value) => {
@@ -364,6 +365,9 @@ export function transpose(lines: LineToken[], tones: number) {
             chord: value.chord
               ? transposeChord(value.chord, tones)
               : value.chord,
+            chordIndex: value.chord
+              ? (getChordIndex(extractBaseChord(value.chord)) + tones) % 12
+              : -1,
           };
         }),
       };
@@ -374,7 +378,7 @@ export function transpose(lines: LineToken[], tones: number) {
 }
 
 export function getChordIndex(key: string) {
-  return castExists(reverseIndex[key.replace('m', '')], `unknown key '${key}'`);
+  return castExists(reverseIndex[key.replace("m", "")], `unknown key '${key}'`);
 }
 
 export function calcKeyDifference(key1: string, key2: string) {
@@ -389,18 +393,18 @@ export function isMajorKey(key: string) {
 }
 
 export function isMinorKey(key: string) {
-  return key.slice(-1) === 'm' && isMajorKey(key.slice(0, -1));
+  return key.slice(-1) === "m" && isMajorKey(key.slice(0, -1));
 }
 
 export function extractChords(lines: LineToken[]): string[] {
   const allChords = lines
     .filter(
       (line): line is chordsAndLyricsLineToken =>
-        line.type === 'chordsAndLyricsLine',
+        line.type === "chordsAndLyricsLine",
     )
     .flatMap((line) => line.value)
     .map((value) => value.chord)
-    .filter((chord): chord is string => chord !== '' && chord !== undefined);
+    .filter((chord): chord is string => chord !== "" && chord !== undefined);
 
   return [...new Set(allChords)].sort();
 }
@@ -408,8 +412,33 @@ export function extractChords(lines: LineToken[]): string[] {
 const baseChordRegex = /^[A-H]#?m?/i;
 
 export function extractBaseChord(chord: string) {
-  return castExists(chord.replace('maj', '').match(baseChordRegex))[0];
+  return castExists(chord.replace("maj", "").match(baseChordRegex))[0];
 }
 export function extractBaseChords(chords: string[]) {
   return chords.map(extractBaseChord);
+}
+
+const majorScale = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+const minorScale = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+
+export function convertChord(chord: string, key: string, toRelative: boolean): string {
+  const [, rootNote, chordType] = chord.match(/^([A-G][#b]?)(.*)$/) || [];
+  if (!rootNote) return chord;
+
+  const isMinor = key.toLowerCase().includes('m');
+  const scale = isMinor ? minorScale : majorScale;
+  const keyRoot = key.replace(/m$/, '');
+
+  const rootIndex = scale.indexOf(keyRoot);
+  const chordIndex = scale.indexOf(rootNote);
+
+  if (toRelative) {
+    let relativeIndex = (chordIndex - rootIndex + 7) % 7;
+    const romanNumerals = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii'];
+    return (isMinor ? romanNumerals[relativeIndex] : romanNumerals[relativeIndex].toUpperCase()) + chordType;
+  } else {
+    // If we're converting from relative to absolute, we'd implement the reverse logic here
+    // For now, we'll just return the original chord as we're focusing on absolute to relative conversion
+    return chord;
+  }
 }
