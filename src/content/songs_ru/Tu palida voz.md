@@ -15,7 +15,7 @@ Te oí decir... adiós, adiós...
 Cerré los ojos y oculté el dolor...
                       B7       Em        
 Sentí tus pasos cruzando la tarde 
-Em7            F#     F#dim B7
+Em7            F#7b9     Cdim B7
 y no te  atajaron mis manos cobardes.
 
 Em            F#dim   Em/G             
@@ -24,7 +24,7 @@ Mi corazón, lloró de amor
 y en el silencio resonó tu voz,
                    B7     Em  
 tu voz querida, lejana y perdida,
-   Em7     F7        B7      Em
+   Em7     Fsus2        B7      Em
 tu voz que era mía... tu pálida voz.
 
 [Chorus]
@@ -51,14 +51,14 @@ Am       D7            G      B7
 nunca... nunca... vendrás.
 
 [Verse 2]
-          Em      Cdim  Em             
+      Em            F#dim   Em/G                 
 Te vi partir, dijiste adiós, temblé de 
-     E7                Am
+               E7            Am
 angustia y oculté el dolor.
              B7               Em      Em7  
 Después, pensando que no volverías traté de
-      C#dim   F#         Cdim B7
- alcanzarte y ya no eras mía.
+        Em7            F#7b9     Cdim B7
+alcanzarte y ya no eras mía.
 Em          Cdim        Em        
 Mi corazón, sangró de amor, y en el 
       E7             Am
