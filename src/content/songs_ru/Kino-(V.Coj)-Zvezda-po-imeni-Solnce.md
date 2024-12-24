@@ -2,6 +2,7 @@
 title: Звезда по имени Солнце
 performer: Кино (В.Цой)
 source: https://akkords.pro/songs/kino/zvezda-po-imeni-solnce/
+key: Am
 ---
 
 Бой: ↓↑⇣↑↓↑⇣⇡

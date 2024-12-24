@@ -11,7 +11,7 @@
       ]" v-for="(line, i) in transposedSong" :key="i">
         <template v-if="line.type === 'chordsLine'">
           <template v-for="(chord, chordIndex) in line.value" :key="chordIndex">
-            <SongChord v-if="chord.chord" :chord="chord.chord" :index="chord.chordIndex" ></SongChord>
+            <SongChord v-if="chord.chord" :chord="chord.chord"></SongChord>
           </template>
         </template>
         <template v-if="line.type === 'lyricsLine'">
@@ -23,8 +23,9 @@
         <template v-if="line.type === 'chordsAndLyricsLine'">
           <div v-for="(item, index) in line.value" :key="index">
             <div class="chord-or-spacer">
-              <SongChord v-if="item.chord" :chord="item.chord" :index="item.chordIndex"> </SongChord>{{ " ".repeat(Math.max(0, item.length -
-                (item.chord ? item.chord.length : 0))) }}
+              <SongChord v-if="item.chord" :chord="displayChord(item.chord, item.romanNumeral)"></SongChord>{{
+               " ".repeat(Math.max(0, item.length -
+                (item.chord ? displayChord(item.chord, item.romanNumeral).length : 0))) }}
             </div>
             <div class="lyrics">{{ item.lyrics }}</div>
           </div>
@@ -43,7 +44,7 @@ import TransposeBar from "./header/TransposeBar/TransposeBar.vue";
 import { castExists } from "../chords/asserts.ts";
 import { useTransposeStore } from "./header/TransposeBar/transpose.store.ts";
 
-const { transposedSong } = castExists(inject<ReturnType<typeof useTransposeStore>>("transpose-store"));
+const { transposedSong, displayChord } = castExists(inject<ReturnType<typeof useTransposeStore>>("transpose-store"));
 </script>
 <style scoped lang="scss">
 .wrapper {

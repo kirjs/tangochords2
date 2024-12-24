@@ -2,6 +2,7 @@
 title: Лесник
 performer: Король и Шут
 source: https://amdm.ru/akkordi/korol_i_shut/2860/lesnik/
+key: Am
 ---
 
 [Вступление]
@@ -9,7 +10,7 @@ Riff 1:
   Am                            F
  Dm                             G
 Riff 2:
-  Am                 F
+  ёAm                 F
  Dm                 G
 
 [Куплет 1]

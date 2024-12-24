@@ -3,6 +3,7 @@ import { analyzeSong } from "../../../chords/analysis";
 
 import {
   calcKeyDifference,
+  extractBaseChord,
   isMajorKey,
   isMinorKey,
   transpose,
@@ -13,6 +14,9 @@ import { castExists } from "../../../chords/asserts";
 import type { useSongStore } from "../../../store/song.store";
 import { useLocalStorage } from "@vueuse/core";
 import { tagLines } from "../../../chords/tag_lines";
+import { addChordIndexes } from "../../../chords/add_chord_indexes";
+import { toRomanNumeralNotation } from "./to_roman_numeral";
+
 
 // TODO: Why can't i just inject it?
 export const useTransposeStore = (
@@ -20,7 +24,8 @@ export const useTransposeStore = (
 ) => {
   const { parsedSong, song } = songStore;
   const shift = useLocalStorage(`shift-${song.value.slug}`, 0);
-
+  const notation = useLocalStorage(`notation-${song.value.slug}`, "A");
+ 
   const key = computed(() => {
     if (song.value.data?.key) {
       return transposeChord(song.value.data.key, shift.value);
@@ -30,7 +35,9 @@ export const useTransposeStore = (
   });
 
   const transposedSong = computed(() => {
-    return transpose(tagLines(parsedSong.value), shift.value);
+    const withTags = tagLines(parsedSong.value);
+    const withIndexes = addChordIndexes(withTags, song.value.data.key);
+    return transpose(withIndexes, shift.value);
   });
 
   const magicKey = computed(() => {
@@ -67,7 +74,16 @@ export const useTransposeStore = (
     transposeTones(calcKeyDifference(castExists(key.value), newKey));
   };
 
+  const displayChord = (regular: string, roman: string) => {
+    console.log(notation.value, regular, roman);    
+    if (notation.value === "A") {
+      return regular;
+    }
+    return roman || '';
+  };
+
   return {
+    displayChord,
     magicKey,
     simpleKeys,
     transposeTones,
@@ -75,6 +91,7 @@ export const useTransposeStore = (
     transposedSong,
     shift,
     key,
+    notation,
   };
 };
 

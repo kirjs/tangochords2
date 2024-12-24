@@ -5,6 +5,7 @@ Words: Mariano Mores
 Music: José María Contursi
 Year: 1941
 Performer: Julio Sosa
+key: Em
 ---
 
 Dm    Gm     A7    Dm

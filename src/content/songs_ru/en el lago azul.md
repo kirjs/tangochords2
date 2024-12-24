@@ -1,11 +1,8 @@
 ---
-title: Tu palida voz
+title: En el lago azul
 Genre: Tango
-Words: Mariano Mores
-Music: José María Contursi
-Year: 1941
-Performer: Homero Manzi
-key: Em
+Performer: Rodolfo Biagi
+key: C
 ---
 
 [Verse 1]

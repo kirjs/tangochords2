@@ -5,6 +5,7 @@ Words: José María Contursi
 Music: Ernesto De Ciccoi
 Performer: Canaro
 Status: Draft
+key: C
 ---
 
 C                       Dm

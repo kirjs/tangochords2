@@ -13,9 +13,11 @@ export const useSongStore = (data: CollectionEntry<"songs_ru">) => {
     return parseChords({ text: song.value.body });
   });
 
+  
+  
   return {
     song: readonly(song),
-    parsedSong,
+    parsedSong,    
   };
 };
 

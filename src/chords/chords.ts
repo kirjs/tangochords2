@@ -232,6 +232,7 @@ interface ChordLineValueToken {
   chord: string | undefined;
   lyrics: string;
   length: number;
+  romanNumeral: string | undefined;
 }
 
 interface chordsAndLyricsLineToken {
@@ -416,29 +417,4 @@ export function extractBaseChord(chord: string) {
 }
 export function extractBaseChords(chords: string[]) {
   return chords.map(extractBaseChord);
-}
-
-const majorScale = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
-const minorScale = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-
-export function convertChord(chord: string, key: string, toRelative: boolean): string {
-  const [, rootNote, chordType] = chord.match(/^([A-G][#b]?)(.*)$/) || [];
-  if (!rootNote) return chord;
-
-  const isMinor = key.toLowerCase().includes('m');
-  const scale = isMinor ? minorScale : majorScale;
-  const keyRoot = key.replace(/m$/, '');
-
-  const rootIndex = scale.indexOf(keyRoot);
-  const chordIndex = scale.indexOf(rootNote);
-
-  if (toRelative) {
-    let relativeIndex = (chordIndex - rootIndex + 7) % 7;
-    const romanNumerals = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii'];
-    return (isMinor ? romanNumerals[relativeIndex] : romanNumerals[relativeIndex].toUpperCase()) + chordType;
-  } else {
-    // If we're converting from relative to absolute, we'd implement the reverse logic here
-    // For now, we'll just return the original chord as we're focusing on absolute to relative conversion
-    return chord;
-  }
 }
