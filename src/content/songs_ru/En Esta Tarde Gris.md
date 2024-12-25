@@ -5,11 +5,13 @@ Words: Mariano Mores
 Music: José María Contursi
 Year: 1941
 Performer: Julio Sosa
-key: Em
+key: Dm
 ---
 
+[intro]
 Dm    Gm     A7    Dm
 
+[verse 1]
 Dm                    A#                  Gm
 Qué ganas de llorar en esta tarde gris,
 Dm         A7           Dm
@@ -18,6 +20,8 @@ E7           A7       C7                 F
 Remordimiento de saber que por mi culpa nunca,
 A7        Dm
 vida, nunca te veré.
+
+[verse 2]
 Dm                A#                  Gm
 Mis ojos al cerrar te ven igual que ayer
 Dm         A7           Dm
@@ -25,6 +29,7 @@ temblando al implorar de nuevo mi querer.
 E7                 A7                                Dm
 Y hoy es tu voz que vuelve a mí  ... en esta tarde gris.
 
+[chorus]
 Dm A7 Dm           A7                Dm
 Ven, triste me decías que en esta soledad
 A#         Gm         A7

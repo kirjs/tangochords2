@@ -3,7 +3,6 @@ import { analyzeSong } from "../../../chords/analysis";
 
 import {
   calcKeyDifference,
-  extractBaseChord,
   isMajorKey,
   isMinorKey,
   transpose,
@@ -15,7 +14,6 @@ import type { useSongStore } from "../../../store/song.store";
 import { useLocalStorage } from "@vueuse/core";
 import { tagLines } from "../../../chords/tag_lines";
 import { addChordIndexes } from "../../../chords/add_chord_indexes";
-import { toRomanNumeralNotation } from "./to_roman_numeral";
 
 
 // TODO: Why can't i just inject it?

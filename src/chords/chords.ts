@@ -312,6 +312,7 @@ function chordsAnLyrycsToken(
       length: part.length,
       chord: chord ?? "",
       lyrics: lyrics.slice(shift, shift + part.length),
+      romanNumeral: undefined,
     });
     shift += part.length;
   }
