@@ -2,14 +2,14 @@
 import Layout from "../layouts/Layout.astro";
 
 import ListHeader from "../components/header/ListHeader/ListHeader.vue";
-import SongList from "../components/SongList.astro";
+import SongList from "../components/SongList.vue";
 import { songsCollection } from "../content/collections";
 ---
 
 <Layout title="Meow">
   <main>
     <ListHeader songs={songsCollection} client:only="vue" />
-    <SongList songs={songsCollection} />
+    <SongList songs={songsCollection} client:only="vue" />
   </main>
 </Layout>
 

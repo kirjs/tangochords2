@@ -9,7 +9,7 @@ No quiero nada, nada más
           Am               E7            Am
 que no me dejes, frente a frente, con la vida.
 
-E F E Am
+E F E AmI don
                    Dm
 Me moriré si me dejás
                Am            B7   E7
